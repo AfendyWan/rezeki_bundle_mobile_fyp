@@ -5,18 +5,21 @@ import 'package:rezeki_bundle_mobile/constants.dart';
 class RoundedInputField extends StatelessWidget {
   final String? hintText;
   final IconData icon;
+  final TextEditingController? emailTextController;
   final ValueChanged<String>? onChanged;
-  const RoundedInputField({
+   const RoundedInputField({
     Key? key,
     this.hintText,
     this.icon = Icons.person,
     this.onChanged,
+    this.emailTextController,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFieldContainer(
       child: TextField(
+        controller: emailTextController,
         onChanged: onChanged,
         cursorColor: kPrimaryColor,
         decoration: InputDecoration(
@@ -27,6 +30,7 @@ class RoundedInputField extends StatelessWidget {
           hintText: hintText,
           border: InputBorder.none,
         ),
+        
       ),
     );
   }
