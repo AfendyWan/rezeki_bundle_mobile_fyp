@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rezeki_bundle_mobile/api/login_api.dart';
 import 'package:rezeki_bundle_mobile/constants.dart';
 import 'package:rezeki_bundle_mobile/screens/Login/components/background.dart';
 import 'package:rezeki_bundle_mobile/screens/Signup/signup_screen.dart';
@@ -11,18 +12,15 @@ import 'package:flutter_svg/svg.dart';
 import '../../../components/text_field_container.dart';
 
 class Body extends StatefulWidget {
- 
   @override
   State<Body> createState() => _BodyState();
 }
-
-
 
 class _BodyState extends State<Body> {
   bool _passwordVisible = true;
   @override
   void initState() {
-    super.initState();  
+    super.initState();
     _passwordVisible = true;
   }
 
@@ -73,7 +71,7 @@ class _BodyState extends State<Body> {
                           cursorColor: kPrimaryColor,
                           decoration: const InputDecoration(
                             icon: Icon(
-                              Icons.person,
+                              Icons.email,
                               color: kPrimaryColor,
                             ),
                             hintText: "Your Email",
@@ -126,9 +124,12 @@ class _BodyState extends State<Body> {
               text: "LOGIN",
               press: () {
                 if (_formKey.currentState != null) {
-                  _formKey.currentState!.validate();
-                } else {
-                  _formKey.currentState?.validate();
+                  if (_formKey.currentState!.validate()) {
+                    loginAcc(
+                        context, emailTextController.text, passwordTextController.text);
+                  } else {
+                    
+                  }
                 }
               },
             ),
