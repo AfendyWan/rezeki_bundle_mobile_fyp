@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:rezeki_bundle_mobile/api/register_api.dart';
 import 'package:rezeki_bundle_mobile/api/setting_api.dart';
 import 'package:rezeki_bundle_mobile/components/text_field_container.dart';
 import 'package:rezeki_bundle_mobile/constants.dart';
@@ -43,6 +45,8 @@ class _BodyState extends State<Body> {
 
   final passwordTextController = TextEditingController();
 
+  final confirmPasswordTextController = TextEditingController();
+
   //for gender dropdown variables
   String? selectedValue;
   var items = ['Male', 'Female'];
@@ -56,6 +60,10 @@ class _BodyState extends State<Body> {
   List<Negeri> _statesList = [];
   List<City>? _cityList = [];
   List<City>? _onChangesCityList = [];
+
+  var getGender;
+  var getState;
+  var getCity;
   getData() async {
     _statesList.clear();
 
@@ -70,8 +78,6 @@ class _BodyState extends State<Body> {
     for (var data in cities) {
       //transfer city list from GET method call to a new one
       _cityList!.add(City(
-          id: data.id, citiesName: data.citiesName, statesId: data.statesId));
-      _onChangesCityList!.add(City(
           id: data.id, citiesName: data.citiesName, statesId: data.statesId));
     }
 
@@ -111,6 +117,7 @@ class _BodyState extends State<Body> {
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       return Form(
+                        key: _formKey,
                         child: Column(
                           children: [
                             TextFieldContainer(
@@ -192,7 +199,10 @@ class _BodyState extends State<Body> {
                                       value: items, child: Text(items));
                                 }).toList(),
                                 onChanged: (value) {
-                                  setState(() {});
+                                  setState(() {
+                                    getGender = value;
+                                    print(getGender);
+                                  });
                                 },
                                 validator: (value) {
                                   if (value == null) {
@@ -281,6 +291,10 @@ class _BodyState extends State<Body> {
                             TextFieldContainer(
                               child: TextFormField(
                                   controller: postCodeTextController,
+                                  keyboardType: TextInputType.number,
+                                   inputFormatters: <TextInputFormatter>[
+                                        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                                      ],
                                   onChanged: (value) {},
                                   cursorColor: kPrimaryColor,
                                   decoration: const InputDecoration(
@@ -320,8 +334,9 @@ class _BodyState extends State<Body> {
                                 }).toList(),
                                 onChanged: (value) async {
                                   setState(() {
+                                    getState = value?.id;
                                     _onChangesCityList?.clear();
-                                   
+
                                     if (_cityList != null) {
                                       for (var data in _cityList!) {
                                         if (data.statesId == value?.id) {
@@ -331,8 +346,9 @@ class _BodyState extends State<Body> {
                                               statesId: data.statesId));
                                         }
                                       }
-                                       _selectedCities = _onChangesCityList![0];
-
+                                      _selectedCities = _onChangesCityList![0];
+                                      getCity =
+                                          _onChangesCityList![0].citiesName;
                                     }
                                   });
                                 },
@@ -365,7 +381,9 @@ class _BodyState extends State<Body> {
                                       child: Text(city.citiesName!));
                                 }).toList(),
                                 onChanged: (value) {
-                                  setState(() {});
+                                  setState(() {
+                                    getCity = value!.citiesName;
+                                  });
                                 },
                                 validator: (value) {
                                   if (value == null) {
@@ -409,6 +427,66 @@ class _BodyState extends State<Body> {
                                     return null;
                                   }),
                             ),
+                            TextFieldContainer(
+                              child: TextFormField(
+                                  controller: confirmPasswordTextController,
+                                  enableSuggestions: false,
+                                  autocorrect: false,
+                                  obscureText: _passwordVisible,
+                                  onChanged: (value) {},
+                                  cursorColor: kPrimaryColor,
+                                  decoration: InputDecoration(
+                                    icon: const Icon(
+                                      Icons.lock,
+                                      color: kPrimaryColor,
+                                    ),
+                                    suffixIcon: IconButton(
+                                      icon: const Icon(
+                                        Icons.visibility,
+                                        color: kPrimaryColor,
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          _passwordVisible = !_passwordVisible;
+                                        });
+                                      },
+                                    ),
+                                    hintText: "Confirm Password",
+                                    border: InputBorder.none,
+                                  ),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return "Please enter to confirm your password";
+                                    } else if (confirmPasswordTextController
+                                            .text !=
+                                        passwordTextController.text) {
+                                      return 'Not match';
+                                    }
+                                    return null;
+                                  }),
+                            ),
+                            RoundedButton(
+                              text: "SIGNUP",
+                              press: () {
+                                print(getCity);
+                                if (_formKey.currentState != null) {
+                                  if (_formKey.currentState!.validate()) {
+                                    registerAcc(
+                                        context,
+                                        firstNameTextController.text,
+                                        lastNameTextController.text,
+                                        emailTextController.text,
+                                        getGender,
+                                        phoneNumberTextController.text,
+                                        shippingAddressTextController.text,
+                                        postCodeTextController.text,
+                                        getState,
+                                        getCity,
+                                        passwordTextController.text);
+                                  } else {}
+                                }
+                              },
+                            ),
                           ],
                         ),
                       );
@@ -416,10 +494,7 @@ class _BodyState extends State<Body> {
                       return const CircularProgressIndicator();
                     }
                   }),
-              RoundedButton(
-                text: "SIGNUP",
-                press: () {},
-              ),
+
               SizedBox(height: size.height * 0.03),
               AlreadyHaveAnAccountCheck(
                 login: false,
