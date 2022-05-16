@@ -16,7 +16,7 @@ class CategorySaleItem {
   factory CategorySaleItem.fromJson(Map<String, dynamic> json) {
   
     return CategorySaleItem(
-      id: json['id'],
+      id: json['saleItemCategoryID'],
       name: json['name'],
       description: json['description'],
       quantity: json['quantity'],

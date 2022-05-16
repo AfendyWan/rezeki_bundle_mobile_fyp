@@ -4,6 +4,7 @@ import 'package:rezeki_bundle_mobile/api/sale_item_api.dart';
 import 'package:rezeki_bundle_mobile/components/size_config.dart';
 import 'package:rezeki_bundle_mobile/constants.dart';
 import 'package:rezeki_bundle_mobile/model/category_sale_item.dart';
+import 'package:rezeki_bundle_mobile/model/sale_item.dart';
 import 'package:rezeki_bundle_mobile/model/user.dart';
 import 'package:rezeki_bundle_mobile/components/home_header.dart';
 import 'package:rezeki_bundle_mobile/screens/Login/components/background.dart';
@@ -19,7 +20,8 @@ import '../../../components/text_field_container.dart';
 class Body extends StatefulWidget {
   final User? userdata;
   final String? token;
-  const Body({Key? key, required this.userdata, required this.token})
+  final int? saleItemCategoryId;
+  const Body({Key? key, required this.userdata, required this.token,  required this.saleItemCategoryId})
       : super(
           key: key,
         );
@@ -29,20 +31,18 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   final AsyncMemoizer _memoizer = AsyncMemoizer();
-  var saleItemCategory;
-  List<CategorySaleItem> _saleItemCategoryList = [];
+  var saleItem;
+  List<SaleItem> _saleItemList = [];
   getData() async {
-    _saleItemCategoryList.clear();
+    _saleItemList.clear();
 
-    saleItemCategory = await getSaleItemCategory();
+    saleItem = await getSaleItemList(widget.saleItemCategoryId);
 
-    for (var data in saleItemCategory) {
+    for (var data in saleItem) {
       //transfer states list from GET method call to a new one
-      _saleItemCategoryList.add(CategorySaleItem(
+      _saleItemList.add(SaleItem(
           id: data.id,
-          description: data.description,
-          name: data.name,
-          quantity: data.quantity,
+        itemName: data.itemName,
           url: data.url));
     }
   }
@@ -81,7 +81,7 @@ class _BodyState extends State<Body> {
                             crossAxisCount: 2,
                             shrinkWrap: true,
                             children: List.generate(
-                                _saleItemCategoryList.length, (index) {
+                                _saleItemList.length, (index) {
                               return Padding(
                                 padding: EdgeInsets.only(left: 15, right: 15),
                                 child: SizedBox(
@@ -95,7 +95,7 @@ class _BodyState extends State<Body> {
                                                   SaleItemScreen(
                                                     token: widget.token,
                                                     userdata: widget.userdata,
-                                                    saleItemCategoryId: saleItemCategory[index].id,
+                                                    saleItemCategoryId: _saleItemList[index].id,
                                                     key: widget.key,
                                                   )
                                             )
@@ -117,17 +117,17 @@ class _BodyState extends State<Body> {
                                             AspectRatio(
                                               aspectRatio: 1.02,
                                               child: Hero(
-                                                  tag: saleItemCategory[index]
-                                                      .id,
+                                                  tag: _saleItemList[index]
+                                                      .id!,
                                                   child: Image.network(
                                                       "http://192.168.0.157:8000" +
-                                                          saleItemCategory[
+                                                          _saleItemList[
                                                                   index]
                                                               .url!)),
                                             ),
                                             const SizedBox(height: 10),
                                             Text(
-                                              saleItemCategory[index].name!,
+                                              _saleItemList[index].itemName!,
                                               style: TextStyle(
                                                   color: Colors.black),
                                               maxLines: 2,
