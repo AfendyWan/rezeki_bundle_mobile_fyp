@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rezeki_bundle_mobile/components/coustom_bottom_nav_bar.dart';
+import 'package:rezeki_bundle_mobile/components/home_header.dart';
 import 'package:rezeki_bundle_mobile/components/size_config.dart';
 import 'package:rezeki_bundle_mobile/enums.dart';
 import 'package:rezeki_bundle_mobile/model/user.dart';
@@ -21,6 +22,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
+      appBar:  HomeHeader(),
       body: Body(token: widget.token, userdata: widget.userdata,),
       bottomNavigationBar: CustomBottomNavBar(selectedMenu: MenuState.home),
       // body: SingleChildScrollView(child: Column(children: [

@@ -10,27 +10,32 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
   }) : super(key: key);
 
   @override
-  Size get preferredSize => const Size.fromHeight(30.0);
+  Size get preferredSize => const Size.fromHeight(70.0);
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      primary: false,
+      primary: true,
       backgroundColor: Colors.transparent,
       elevation:0,
       automaticallyImplyLeading: false,
       flexibleSpace: Padding(
         padding:(
             EdgeInsets.fromLTRB(getProportionateScreenWidth(20), 0, getProportionateScreenWidth(20), 0)),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Column(
           children: [
-            SearchField(),
-            IconBtnWithCounter(
-                svgSrc: "assets/icons/Cart Icon.svg", press: () {}),
-            IconBtnWithCounter(
-              svgSrc: "assets/icons/Bell.svg",
-              numOfitem: 3,
-              press: () {},
+            SizedBox(height: getProportionateScreenHeight(40),),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SearchField(),
+                IconBtnWithCounter(
+                    svgSrc: "assets/icons/Cart Icon.svg", press: () {}),
+                IconBtnWithCounter(
+                  svgSrc: "assets/icons/Bell.svg",
+                  numOfitem: 3,
+                  press: () {},
+                ),
+              ],
             ),
           ],
         ),

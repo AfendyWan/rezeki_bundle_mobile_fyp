@@ -25,8 +25,8 @@ class _BodyState extends State<Body> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: getProportionateScreenHeight(20)),
-            HomeHeader(),
+          
+           
             
             DiscountBanner(),
             Categories(),

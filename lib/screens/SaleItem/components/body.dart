@@ -56,6 +56,7 @@ class _BodyState extends State<Body> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      appBar: HomeHeader(),
       body: Background(
           child: FutureBuilder(
               future: getData(),
@@ -68,12 +69,7 @@ class _BodyState extends State<Body> {
                   return SingleChildScrollView(
                     child: Column(
                       children: [
-                        SizedBox(height: getProportionateScreenHeight(40)),
-                        const Align(
-                          alignment:
-                              AlignmentDirectional.center, // <-- SEE HERE
-                          child: HomeHeader(),
-                        ),
+                       
                         Align(
                           alignment: AlignmentDirectional.bottomCenter, // <--
                           child: GridView.count(
