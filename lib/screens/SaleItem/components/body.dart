@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:rezeki_bundle_mobile/api/login_api.dart';
+
 import 'package:rezeki_bundle_mobile/api/sale_item_api.dart';
 import 'package:rezeki_bundle_mobile/components/size_config.dart';
-import 'package:rezeki_bundle_mobile/constants.dart';
-import 'package:rezeki_bundle_mobile/model/category_sale_item.dart';
+
 import 'package:rezeki_bundle_mobile/model/sale_item.dart';
 import 'package:rezeki_bundle_mobile/model/user.dart';
 import 'package:rezeki_bundle_mobile/components/home_header.dart';
 import 'package:rezeki_bundle_mobile/screens/Login/components/background.dart';
-import 'package:rezeki_bundle_mobile/screens/SaleItem/sale_item_screen.dart';
-import 'package:rezeki_bundle_mobile/screens/Signup/signup_screen.dart';
-import 'package:rezeki_bundle_mobile/components/already_have_an_account_acheck.dart';
-import 'package:rezeki_bundle_mobile/components/rounded_button.dart';
+
 import 'package:async/async.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:rezeki_bundle_mobile/screens/SaleItemDetails/sale_item_details_screen.dart';
+
 
 import '../../../components/text_field_container.dart';
 
@@ -42,7 +39,9 @@ class _BodyState extends State<Body> {
       //transfer states list from GET method call to a new one
       _saleItemList.add(SaleItem(
           id: data.id,
-        itemName: data.itemName,
+          itemID: data.itemID,
+          itemName: data.itemName,
+          itemDescription: data.itemDescription,
           url: data.url));
     }
   }
@@ -69,7 +68,7 @@ class _BodyState extends State<Body> {
                   return SingleChildScrollView(
                     child: Column(
                       children: [
-                       
+                     
                         Align(
                           alignment: AlignmentDirectional.bottomCenter, // <--
                           child: GridView.count(
@@ -88,16 +87,17 @@ class _BodyState extends State<Body> {
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) =>
-                                                  SaleItemScreen(
+                                                SaleItemDetailsScreen(
                                                     token: widget.token,
                                                     userdata: widget.userdata,
-                                                    saleItemCategoryId: _saleItemList[index].id,
+                                                    saleItem: _saleItemList[index],
                                                     key: widget.key,
-                                                  )
+                                                ),
                                             )
                                           );
                                     },
-                                    child: Column(children: [
+                                    child: Column(
+                                      children: [
                                       Card(
                                         shape: RoundedRectangleBorder(
                                           borderRadius:

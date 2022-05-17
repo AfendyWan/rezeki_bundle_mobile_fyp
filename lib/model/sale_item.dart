@@ -1,6 +1,8 @@
 class SaleItem {
- int? id;
+  int? id;
+  int? itemID;
   String? itemName;
+  String? itemDescription;
 
   int? itemCategory;
   int? itemStock;
@@ -17,15 +19,17 @@ class SaleItem {
 
   String? url;
 
-  SaleItem({this.id, this.itemName, this.itemCategory, this.itemStock, this.itemColor, this.itemSize, 
+  SaleItem({this.id, this.itemID, this.itemName, this.itemDescription, this.itemCategory, this.itemStock, this.itemColor, this.itemSize, 
   this.itemBrand, this.itemPrice, this.itemPromotionStatus, this.itemPromotionPrice, this.itemPromotionStartDate,
   this.itemPromotionEndDate, this.itemActivationStatus, this.url});
 
  factory SaleItem.fromJson(Map<String, dynamic> json) {
   
     return SaleItem(
-      id: json['sale_item_category_id'],
+      id: json['id'],
+      itemID: json['itemID'],
       itemName: json['itemName'],
+      itemDescription: json['itemDescription'],
       itemCategory: json['itemCategory'],
       itemStock: json['itemStock'],
       url: json['url'],
