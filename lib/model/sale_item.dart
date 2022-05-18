@@ -9,10 +9,10 @@ class SaleItem {
   String? itemColor;
   String? itemSize;
   String? itemBrand;
-  double? itemPrice;
+  String? itemPrice;
   
   int? itemPromotionStatus;
-  double? itemPromotionPrice;
+  String? itemPromotionPrice;
   String? itemPromotionStartDate;
   String? itemPromotionEndDate;
   int? itemActivationStatus;
@@ -32,6 +32,15 @@ class SaleItem {
       itemDescription: json['itemDescription'],
       itemCategory: json['itemCategory'],
       itemStock: json['itemStock'],
+      itemColor: json['itemColor'],
+      itemSize: json['itemSize'],
+      itemBrand: json['itemBrand'],
+      itemPrice: json['itemPrice'], 
+      itemPromotionStatus: json['itemPromotionStatus'],
+      itemPromotionPrice: json['itemPromotionPrice'], 
+      itemPromotionStartDate: json['itemPromotionStartDate'], 
+      itemPromotionEndDate: json['itemPromotionEndDate'],
+      itemActivationStatus: json['itemActivationStatus'],
       url: json['url'],
     );
   }

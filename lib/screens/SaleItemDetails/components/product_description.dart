@@ -63,6 +63,7 @@ class _ProductDescriptionState extends State<ProductDescription> {
         ),
         Padding(
           padding: EdgeInsets.only(
+             top: getProportionateScreenHeight(20),
             left: getProportionateScreenWidth(20),
             right: getProportionateScreenWidth(64),
           ),
@@ -71,10 +72,116 @@ class _ProductDescriptionState extends State<ProductDescription> {
             maxLines: 3,
           ),
         ),
+        widget.saleItem!.itemPromotionStatus == 0 ||  widget.saleItem!.itemPromotionStatus == null?
+        Padding(
+          padding: EdgeInsets.only(
+            top: getProportionateScreenHeight(20),
+            left: getProportionateScreenWidth(20),
+            right: getProportionateScreenWidth(64),
+          ),
+          child: Text(
+           "RM" + widget.saleItem!.itemPrice!,         
+            style: TextStyle(
+              fontSize: 24
+            ),
+          ),
+        ):Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(
+                top: getProportionateScreenHeight(20),
+                left: getProportionateScreenWidth(20),
+                right: getProportionateScreenWidth(64),
+              ),
+              child: Text(
+               "Promotion Now!!",         
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.red,
+                ),
+              ),
+            ),
+             Padding(
+              padding: EdgeInsets.only(
+                top: getProportionateScreenHeight(1),
+                left: getProportionateScreenWidth(20),
+                right: getProportionateScreenWidth(64),
+              ),
+              child: Text(
+               "Only @ RM" + widget.saleItem!.itemPromotionPrice!,         
+                style: TextStyle(
+                  fontSize: 24,
+                  color: Colors.red,
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                top: getProportionateScreenHeight(1),
+                left: getProportionateScreenWidth(20),
+                right: getProportionateScreenWidth(64),
+                bottom: getProportionateScreenHeight(10),
+              ),
+              child: Text(
+                widget.saleItem!.itemPromotionStartDate! + " - " +  widget.saleItem!.itemPromotionEndDate!,         
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.red,
+                ),
+              ),
+            ),
+          ],
+        ),
+
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+                 Padding(
+          padding: EdgeInsets.only(
+            top: getProportionateScreenHeight(10),
+            left: getProportionateScreenWidth(20),
+            
+          ),
+          child: Text(
+            "Colors: " + widget.saleItem!.itemColor!.toString(),         
+              style: TextStyle(
+                fontSize: 20
+              ),
+            ),
+          ),
+         Padding(
+          padding: EdgeInsets.only(
+            top: getProportionateScreenHeight(10),
+            left: getProportionateScreenWidth(20),
+            right: getProportionateScreenWidth(40),
+          ),
+          child: Text(
+           "Sizes: " + widget.saleItem!.itemSize!.toString(),         
+            style: TextStyle(
+              fontSize: 20
+            ),
+          ),
+        ),
+          ],
+        ),
+        Padding(
+          padding: EdgeInsets.only(
+            top: getProportionateScreenHeight(10),
+            left: getProportionateScreenWidth(20),
+            right: getProportionateScreenWidth(64),
+          ),
+          child: Text(
+           "Currently only " + widget.saleItem!.itemStock!.toString() + " stocks available",         
+            style: TextStyle(
+              fontSize: 15
+            ),
+          ),
+        ),
         Padding(
           padding: EdgeInsets.symmetric(
             horizontal: getProportionateScreenWidth(20),
-            vertical: 10,
+            vertical: getProportionateScreenHeight(10),
           ),
           child: GestureDetector(
             onTap: () {},
@@ -94,7 +201,8 @@ class _ProductDescriptionState extends State<ProductDescription> {
               ],
             ),
           ),
-        )
+        ),
+        
       ],
     );
   }

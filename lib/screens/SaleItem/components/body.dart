@@ -37,12 +37,25 @@ class _BodyState extends State<Body> {
 
     for (var data in saleItem) {
       //transfer states list from GET method call to a new one
-      _saleItemList.add(SaleItem(
+      if (data.itemActivationStatus == 1){
+          _saleItemList.add(SaleItem(
           id: data.id,
           itemID: data.itemID,
           itemName: data.itemName,
           itemDescription: data.itemDescription,
+          itemCategory: data.itemCategory,
+          itemStock: data.itemStock,
+          itemColor: data.itemColor,
+          itemSize: data.itemSize,
+          itemBrand: data.itemBrand,
+          itemPrice: data.itemPrice,
+          itemPromotionStatus: data.itemPromotionStatus,
+          itemPromotionPrice: data.itemPromotionPrice,
+          itemPromotionStartDate: data.itemPromotionStartDate,
+          itemPromotionEndDate: data.itemPromotionEndDate,
+          itemActivationStatus: data.itemActivationStatus,
           url: data.url));
+      }    
     }
   }
 
