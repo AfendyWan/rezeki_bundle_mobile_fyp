@@ -24,17 +24,17 @@ loginAcc(context, email, password) async {
   var response = await request.send();
   var respStr = await response.stream.bytesToString();
   var jsonResponse = jsonDecode(respStr);
+  print(jsonResponse);
   if (response.statusCode == 200) {
     User? userdata = User.fromJson(jsonDecode(respStr));
-   return Navigator.pushAndRemoveUntil(
+    return Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
             builder: (context) => DashboardScreen(
                   userdata: userdata,
-                  token: userdata.token,                
+                  token: userdata.token,
                 )),
         (Route<dynamic> route) => false);
- 
   } else {
     return showDialog(
         context: context,
@@ -42,7 +42,9 @@ loginAcc(context, email, password) async {
           return AlertDialog(
             title: Text(jsonResponse["errors"]),
             actions: [
-              TextButton(onPressed: () => Navigator.pop(context), child: const Text("OK"))
+              TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text("OK"))
             ],
           );
         });
