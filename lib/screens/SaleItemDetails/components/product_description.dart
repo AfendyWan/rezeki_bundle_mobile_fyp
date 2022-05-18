@@ -61,8 +61,18 @@ class _ProductDescriptionState extends State<ProductDescription> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () {
-                    print("mew mew");
+                  onTap: () async {
+                    var result;
+
+                    result = await toggleWishList(
+                        widget.token,
+                        widget.userdata!.id,
+                        widget.saleItem!.itemID,
+                        isWishList);
+                    setState(() {
+                      isWishList = !isWishList;
+                    });
+                    print(result);
                   },
                   child: Align(
                     alignment: Alignment.centerRight,
