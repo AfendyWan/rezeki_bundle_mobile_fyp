@@ -7,6 +7,7 @@ import 'package:rezeki_bundle_mobile/model/sale_item.dart';
 import 'package:rezeki_bundle_mobile/model/sale_item_image.dart';
 
 getIsWishList(token, userID, saleItemID) async {
+
   //set api url
   final queryParameters = {
     'userID': userID.toString(),
@@ -39,7 +40,6 @@ getIsWishList(token, userID, saleItemID) async {
 }
 
 toggleWishList(token, userID, saleItemID, wishListStatus) async {
-
   //set api url
   final queryParameters = {
     'userID': userID.toString(),
@@ -61,13 +61,36 @@ toggleWishList(token, userID, saleItemID, wishListStatus) async {
     headers: header,
   );
 
-  
   var respStr = await response.body;
   var jsonResponse = jsonDecode(respStr);
 
   //get api result
   if (response.statusCode == 200) {
     return jsonResponse;
+  } else {
+    print("Failed");
+  }
+}
+
+getUserWishList(id) async {
+  //set api url
+  var url =
+      "http://192.168.0.157:8000/api/wishList/getUserWishList/" + id.toString();
+
+  //initiate api
+  var response = await http.get(Uri.parse(url), headers: {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+  });
+
+  //get api result
+  if (response.statusCode == 200) {
+    var jsonResponse = jsonDecode(response.body);
+
+    List<SaleItem> saleItem = List<SaleItem>.from(
+        jsonResponse.map((model) => SaleItem.fromJson(model)));
+
+    return saleItem;
   } else {
     print("Failed");
   }

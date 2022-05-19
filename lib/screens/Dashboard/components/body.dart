@@ -26,10 +26,8 @@ class _BodyState extends State<Body> {
         child: Column(
           children: [
           
-           
-            
             DiscountBanner(),
-            Categories(),
+            Categories(userdata: widget.userdata, token: widget.token),
             SpecialOffers(),
             SizedBox(height: getProportionateScreenWidth(30)),
             PopularProducts(key: widget.key, userdata: widget.userdata, token: widget.token),

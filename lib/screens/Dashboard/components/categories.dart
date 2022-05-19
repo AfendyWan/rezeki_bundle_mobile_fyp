@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:rezeki_bundle_mobile/components/size_config.dart';
+import 'package:rezeki_bundle_mobile/model/user.dart';
+import 'package:rezeki_bundle_mobile/screens/WishList/wish_list_screen.dart';
 
+class Categories extends StatefulWidget {
+    final User? userdata;
+  final String? token;
+  const Categories({ required this.userdata, required this.token});
+  @override
+  State<Categories> createState() => _CategoriesState();
+}
 
-
-class Categories extends StatelessWidget {
+class _CategoriesState extends State<Categories> {
   @override
   Widget build(BuildContext context) {
     List<Map<String, dynamic>> categories = [
@@ -24,7 +32,22 @@ class Categories extends StatelessWidget {
           (index) => CategoryCard(
             icon: categories[index]["icon"],
             text: categories[index]["text"],
-            press: () {},
+            press: () {
+              print(categories[index]["text"]);
+              if(categories[index]["text"] == "Wish"){
+                 Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                     builder: (context) =>
+                        WishListScreen(
+                          token: widget.token,
+                          userdata: widget.userdata,
+                          key: widget.key,
+                        )
+                  )
+                );
+              }
+            },
           ),
         ),
       ),
