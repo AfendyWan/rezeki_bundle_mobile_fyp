@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:rezeki_bundle_mobile/components/size_config.dart';
+import 'package:rezeki_bundle_mobile/model/user.dart';
+import 'package:rezeki_bundle_mobile/screens/Cart/cart_screen.dart';
 
 import '../screens/Dashboard/components/icon_btn_with_counter.dart';
 import '../screens/Dashboard/components/search_field.dart';
 
 class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
-  const HomeHeader({
-    Key? key,
-  }) : super(key: key);
+  final User? userdata;
+  final String? token;
+  const HomeHeader({Key? key, required this.userdata, required this.token})
+      : super(
+          key: key,
+        );
 
   @override
   Size get preferredSize => const Size.fromHeight(70.0);
@@ -16,20 +21,34 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       primary: true,
       backgroundColor: Colors.transparent,
-      elevation:0,
+      elevation: 0,
       automaticallyImplyLeading: false,
       flexibleSpace: Padding(
-        padding:(
-            EdgeInsets.fromLTRB(getProportionateScreenWidth(20), 0, getProportionateScreenWidth(20), 0)),
+        padding: (EdgeInsets.fromLTRB(getProportionateScreenWidth(20), 0,
+            getProportionateScreenWidth(20), 0)),
         child: Column(
           children: [
-            SizedBox(height: getProportionateScreenHeight(40),),
+            SizedBox(
+              height: getProportionateScreenHeight(40),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SearchField(),
                 IconBtnWithCounter(
-                    svgSrc: "assets/icons/Cart Icon.svg", press: () {}),
+                    svgSrc: "assets/icons/Cart Icon.svg",
+                    press: () {
+                        Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                CartScreen(
+                                    token: token,
+                                    userdata: userdata,
+                                  )
+                              )
+                            );                     
+                    }),
                 IconBtnWithCounter(
                   svgSrc: "assets/icons/Bell.svg",
                   numOfitem: 3,

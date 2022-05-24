@@ -17,8 +17,8 @@ import '../../../components/text_field_container.dart';
 class Body extends StatefulWidget {
   final User? userdata;
   final String? token;
-  final int? saleItemCategoryId;
-  const Body({Key? key, required this.userdata, required this.token,  required this.saleItemCategoryId})
+
+  const Body({Key? key, required this.userdata, required this.token, })
       : super(
           key: key,
         );
@@ -29,16 +29,16 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   final AsyncMemoizer _memoizer = AsyncMemoizer();
   var saleItem;
-  List<SaleItem> _saleItemList = [];
+  List<SaleItem> _saleItemPromotionList = [];
   getData() async {
-    _saleItemList.clear();
+    _saleItemPromotionList.clear();
 
-    saleItem = await getSaleItemList(widget.saleItemCategoryId);
+    saleItem = await getPromotionSaleItemList();
 
     for (var data in saleItem) {
       //transfer states list from GET method call to a new one
       if (data.itemActivationStatus == 1){
-          _saleItemList.add(SaleItem(
+          _saleItemPromotionList.add(SaleItem(
           id: data.id,
           itemID: data.itemID,
           itemName: data.itemName,
@@ -89,7 +89,7 @@ class _BodyState extends State<Body> {
                             crossAxisCount: 2,
                             shrinkWrap: true,
                             children: List.generate(
-                                _saleItemList.length, (index) {
+                                _saleItemPromotionList.length, (index) {
                               return Padding(
                                 padding: EdgeInsets.only(left: 15, right: 15),
                                 child: SizedBox(
@@ -103,7 +103,7 @@ class _BodyState extends State<Body> {
                                                 SaleItemDetailsScreen(
                                                     token: widget.token,
                                                     userdata: widget.userdata,
-                                                    saleItem: _saleItemList[index],
+                                                    saleItem: _saleItemPromotionList[index],
                                                     key: widget.key,
                                                 ),
                                             )
@@ -126,17 +126,17 @@ class _BodyState extends State<Body> {
                                             AspectRatio(
                                               aspectRatio: 1.02,
                                               child: Hero(
-                                                  tag: _saleItemList[index]
+                                                  tag: _saleItemPromotionList[index]
                                                       .id!,
                                                   child: Image.network(
                                                       "http://192.168.0.157:8000" +
-                                                          _saleItemList[
+                                                          _saleItemPromotionList[
                                                                   index]
                                                               .url!)),
                                             ),
                                             const SizedBox(height: 10),
                                             Text(
-                                              _saleItemList[index].itemName!,
+                                              _saleItemPromotionList[index].itemName!,
                                               style: TextStyle(
                                                   color: Colors.black),
                                               maxLines: 2,

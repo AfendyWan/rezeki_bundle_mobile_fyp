@@ -22,7 +22,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      appBar:  HomeHeader(),
+      appBar:  HomeHeader(token: widget.token, userdata: widget.userdata,),
       body: Body(token: widget.token, userdata: widget.userdata,),
       bottomNavigationBar: CustomBottomNavBar(selectedMenu: MenuState.home),
       // body: SingleChildScrollView(child: Column(children: [

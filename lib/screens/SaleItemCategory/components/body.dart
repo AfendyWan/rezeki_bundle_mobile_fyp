@@ -56,7 +56,7 @@ class _BodyState extends State<Body> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: HomeHeader(),
+      appBar: HomeHeader(token: widget.token, userdata: widget.userdata,),
       body: Background(
           child: FutureBuilder(
               future: getData(),

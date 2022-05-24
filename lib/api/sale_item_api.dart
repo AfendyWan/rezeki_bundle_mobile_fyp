@@ -98,3 +98,26 @@ getFirstThreeSaleItemCategory() async {
     print("Failed");
   }
 }
+
+getPromotionSaleItemList() async {
+  //set api url
+  var url = "http://192.168.0.157:8000/api/saleItem/showSaleItemPromotionList/";
+
+  //initiate api
+  var response = await http.get(Uri.parse(url), headers: {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+  });
+
+  //get api result
+  if (response.statusCode == 200) {
+    var jsonResponse = jsonDecode(response.body);
+
+    List<SaleItem> saleItem = List<SaleItem>.from(
+        jsonResponse.map((model) => SaleItem.fromJson(model)));
+   
+    return saleItem;
+  } else {
+    print("Failed");
+  }
+}

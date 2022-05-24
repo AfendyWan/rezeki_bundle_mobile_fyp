@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:rezeki_bundle_mobile/components/size_config.dart';
 import 'package:rezeki_bundle_mobile/model/user.dart';
+import 'package:rezeki_bundle_mobile/screens/PromotionSaleItem/promotion_sale_item_screen.dart';
 import 'package:rezeki_bundle_mobile/screens/WishList/wish_list_screen.dart';
 
 class Categories extends StatefulWidget {
@@ -40,6 +41,18 @@ class _CategoriesState extends State<Categories> {
                   MaterialPageRoute(
                      builder: (context) =>
                         WishListScreen(
+                          token: widget.token,
+                          userdata: widget.userdata,
+                          key: widget.key,
+                        )
+                  )
+                );
+              }else if(categories[index]["text"] == "Flash Deal"){
+                 Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                     builder: (context) =>
+                        PromotionSaleItemScreen(
                           token: widget.token,
                           userdata: widget.userdata,
                           key: widget.key,
