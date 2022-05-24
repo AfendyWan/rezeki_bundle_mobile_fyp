@@ -26,10 +26,9 @@ class _BodyState extends State<Body> {
   List<CartItem> _cartItemList = [];
   getData() async {
     _cartItemList.clear();
-  print("getting cart item");
+  
     cartItem = await getUserCartItem(widget.token, widget.userdata!.id);
-     print("finish cart item");
-    print(cartItem);
+   
     for (var data in cartItem) {
       //transfer states list from GET method call to a new one
         _cartItemList.add(CartItem(
@@ -63,10 +62,7 @@ itemTotalPrice:data.itemTotalPrice
               print('project snapshot data is: ${projectSnap.data}');
               return const SizedBox();
             } else if (projectSnap.connectionState == ConnectionState.done) {
-              print('A');
-              print(
-                _cartItemList.length,
-              );
+             
 
               return ListView.builder(
                 itemCount: _cartItemList.length,
@@ -75,9 +71,10 @@ itemTotalPrice:data.itemTotalPrice
                   child: Dismissible(
                     key: Key(_cartItemList[index].id.toString()),
                     direction: DismissDirection.endToStart,
-                    onDismissed: (direction) {
-                      setState(() {
-                        // demoCarts.removeAt(index);
+                    onDismissed: (direction) async{
+                        await deleteCartItem(widget.token, _cartItemList[index].cart_id, _cartItemList[index].sale_item_id);
+                      setState(()  {
+                      
                       });
                     },
                     background: Container(
@@ -88,7 +85,9 @@ itemTotalPrice:data.itemTotalPrice
                       ),
                       child: Row(
                         children: [
-                           Spacer(),
+                           const Spacer(
+
+                           ),
                           SvgPicture.asset("assets/icons/Trash.svg"),
                         ],
                       ),
