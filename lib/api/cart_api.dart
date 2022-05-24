@@ -120,27 +120,24 @@ addCartItem(token, userID, saleItemID, quantity) async {
     'quantity': quantity.toString(),
   };
 
-  Map<String, String> header = {
+  Map<String, String> headers = {
     HttpHeaders.authorizationHeader: "Token $token",
     HttpHeaders.contentTypeHeader: "application/json"
   };
 
   var url = "http://192.168.0.157:8000/api/cart/addCartItem?";
 
-  Uri uri = Uri.parse(url);
-  final finalUri = uri.replace(queryParameters: queryParameters); //USE THIS
-  print(finalUri);
-  final response = await http.get(
-    finalUri,
-    headers: header,
-  );
+  var request = http.MultipartRequest('POST', Uri.parse(url));
+  request.headers.addAll(headers);
+  request.fields['userID'] = userID.toString();
+  request.fields['saleItemID'] = saleItemID.toString();
+  request.fields['quantity'] = quantity.toString();
+   var response = await request.send();
 
-  var respStr = await response.body;
-  var jsonResponse = jsonDecode(respStr);
 
   //get api result
   if (response.statusCode == 200) {
-    return jsonResponse;
+    return response;
   } else {
     print("Failed");
   }
