@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:rezeki_bundle_mobile/components/size_config.dart';
 import 'package:rezeki_bundle_mobile/model/user.dart';
+import 'package:rezeki_bundle_mobile/screens/Feedback/view_feedback_screen.dart';
 import 'package:rezeki_bundle_mobile/screens/PromotionSaleItem/promotion_sale_item_screen.dart';
 import 'package:rezeki_bundle_mobile/screens/WishList/wish_list_screen.dart';
 
@@ -21,7 +22,7 @@ class _CategoriesState extends State<Categories> {
       {"icon": "assets/icons/Bill Icon.svg", "text": "Transact"},
       {"icon": "assets/icons/Shop Icon.svg", "text": "Ship"},
       {"icon": "assets/icons/Gift Icon.svg", "text": "Wish"},
-      {"icon": "assets/icons/Discover.svg", "text": "More"},
+      {"icon": "assets/icons/Discover.svg", "text": "Feeds"},
     ];
     return Padding(
       padding: EdgeInsets.all(getProportionateScreenWidth(20)),
@@ -59,6 +60,18 @@ class _CategoriesState extends State<Categories> {
                         )
                   )
                 );
+              }else if(categories[index]["text"] == "Feeds"){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          ViewFeedbackScreen(
+                            token: widget.token,
+                            userdata: widget.userdata,
+                            key: widget.key,
+                          )
+                    )
+                  );
               }
             },
           ),
