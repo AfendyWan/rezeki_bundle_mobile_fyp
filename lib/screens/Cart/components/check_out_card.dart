@@ -80,10 +80,15 @@ class _CheckoutCardState extends State<CheckoutCard> {
                   TextSpan(
                     text: "Total:\n",
                     children: [
+                       widget.cartdata.toString() == "null"?
+                      TextSpan(
+                        text: "RM 0.00",
+                        style: TextStyle(fontSize: 16, color: Colors.black),
+                      ):
                       TextSpan(
                         text: "RM " +  widget.cartdata!.totalPrice.toString(),
                         style: TextStyle(fontSize: 16, color: Colors.black),
-                      ),
+                      )
                     ],
                   ),
                 ),

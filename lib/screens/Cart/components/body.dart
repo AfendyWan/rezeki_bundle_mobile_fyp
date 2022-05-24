@@ -5,6 +5,7 @@ import 'package:rezeki_bundle_mobile/components/home_header.dart';
 import 'package:rezeki_bundle_mobile/components/size_config.dart';
 import 'package:rezeki_bundle_mobile/model/cart_item.dart';
 import 'package:rezeki_bundle_mobile/model/user.dart';
+import 'package:rezeki_bundle_mobile/screens/Cart/components/check_out_card.dart';
 
 import 'cart_card.dart';
 import 'package:async/async.dart';
@@ -12,7 +13,12 @@ import 'package:async/async.dart';
 class Body extends StatefulWidget {
   final User? userdata;
   final String? token;
-  const Body({Key? key, required this.userdata, required this.token})
+  final int? isCartEmpty;
+  const Body(
+      {Key? key,
+      required this.userdata,
+      required this.token,
+      required this.isCartEmpty})
       : super(
           key: key,
         );
@@ -26,33 +32,33 @@ class _BodyState extends State<Body> {
   List<CartItem> _cartItemList = [];
   getData() async {
     _cartItemList.clear();
-  
+
     cartItem = await getUserCartItem(widget.token, widget.userdata!.id);
-   
+
     for (var data in cartItem) {
       //transfer states list from GET method call to a new one
-        _cartItemList.add(CartItem(
-            id: data.id,
-            cart_id: data.cart_id,
-            quantity: data.quantity,
-            sale_item_id: data.sale_item_id,
-            image_url: data.image_url, 
-            itemName: data.itemName,
-            itemCategory: data.itemCategory,
-            itemStock: data.itemStock,
-            itemPrice: data.itemPrice,
-            itemPromotionPrice: data.itemPromotionPrice,
-            itemPromotionStatus: data.itemPromotionStatus,
-            itemActivationStatus: data.itemActivationStatus,
-itemTotalPrice:data.itemTotalPrice
-      ));
-    } 
+      _cartItemList.add(CartItem(
+          id: data.id,
+          cart_id: data.cart_id,
+          quantity: data.quantity,
+          sale_item_id: data.sale_item_id,
+          image_url: data.image_url,
+          itemName: data.itemName,
+          itemCategory: data.itemCategory,
+          itemStock: data.itemStock,
+          itemPrice: data.itemPrice,
+          itemPromotionPrice: data.itemPromotionPrice,
+          itemPromotionStatus: data.itemPromotionStatus,
+          itemActivationStatus: data.itemActivationStatus,
+          itemTotalPrice: data.itemTotalPrice));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+   
     return Scaffold(
-      body: Padding(
+      body:   widget.isCartEmpty == 1? Padding(
         padding:
             EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
         child: FutureBuilder(
@@ -62,8 +68,6 @@ itemTotalPrice:data.itemTotalPrice
               print('project snapshot data is: ${projectSnap.data}');
               return const SizedBox();
             } else if (projectSnap.connectionState == ConnectionState.done) {
-             
-
               return ListView.builder(
                 itemCount: _cartItemList.length,
                 itemBuilder: (context, index) => Padding(
@@ -71,11 +75,12 @@ itemTotalPrice:data.itemTotalPrice
                   child: Dismissible(
                     key: Key(_cartItemList[index].id.toString()),
                     direction: DismissDirection.endToStart,
-                    onDismissed: (direction) async{
-                        await deleteCartItem(widget.token, _cartItemList[index].cart_id, _cartItemList[index].sale_item_id);
-                      setState(()  {
-                      
-                      });
+                    onDismissed: (direction) async {
+                      await deleteCartItem(
+                          widget.token,
+                          _cartItemList[index].cart_id,
+                          _cartItemList[index].sale_item_id);
+                      setState(() {});
                     },
                     background: Container(
                       padding: EdgeInsets.symmetric(horizontal: 20),
@@ -85,9 +90,7 @@ itemTotalPrice:data.itemTotalPrice
                       ),
                       child: Row(
                         children: [
-                           const Spacer(
-
-                           ),
+                          const Spacer(),
                           SvgPicture.asset("assets/icons/Trash.svg"),
                         ],
                       ),
@@ -102,6 +105,16 @@ itemTotalPrice:data.itemTotalPrice
           },
         ),
         // child:
+      ):
+      Center(child: Text(
+        "Cart is Empty",
+        style: TextStyle(fontSize: 24),
+         textAlign: TextAlign.center,
+      )),
+      bottomNavigationBar: CheckoutCard(
+        userdata: widget.userdata,
+        token: widget.token,
+        cartdata: cartItem,
       ),
     );
   }

@@ -46,14 +46,17 @@ class _CartScreenState extends State<CartScreen> {
           } else if (projectSnap.connectionState == ConnectionState.done) {
             return Scaffold(
               appBar: buildAppBar(context, 1),
-              body: Body(
+              body: cartItem!.cartItemQuantity.toString() != "null" ? 
+              Body(
                 token: widget.token,
                 userdata: widget.userdata,
-              ),
-              bottomNavigationBar: CheckoutCard(
-                userdata: widget.userdata,
+                isCartEmpty: 1,
+              ):
+
+                 Body(
                 token: widget.token,
-                cartdata: cartItem,
+                userdata: widget.userdata,
+                isCartEmpty: 0,
               ),
             );
           } else {
@@ -85,7 +88,7 @@ class _CartScreenState extends State<CartScreen> {
           SizedBox(
             height: 5,
           ),
-          checkFutureBuilder == 1 ?
+          checkFutureBuilder == 1 &&  cartItem!.cartItemQuantity.toString() != "null" ?
           Text(
               cartItem!.cartItemQuantity.toString() + " items",
             style: Theme.of(context).textTheme.caption,
