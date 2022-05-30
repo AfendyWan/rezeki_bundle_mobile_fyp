@@ -25,6 +25,7 @@ class User {
     return User(
       id: json['id'],
       first_name: json['first_name'],
+       last_name: json['last_name'],
       email: json['email'],
       role: json['role'],
       gender: json['gender'],

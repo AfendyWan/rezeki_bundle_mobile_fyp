@@ -39,6 +39,7 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
                     svgSrc: "assets/icons/Cart Icon.svg",
                     press: () {
                         Navigator.push(
+                         
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>

@@ -2,28 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rezeki_bundle_mobile/api/register_api.dart';
 import 'package:rezeki_bundle_mobile/api/setting_api.dart';
+import 'package:rezeki_bundle_mobile/components/rounded_button.dart';
 import 'package:rezeki_bundle_mobile/components/text_field_container.dart';
 import 'package:rezeki_bundle_mobile/constants.dart';
 import 'package:rezeki_bundle_mobile/model/city.dart';
 import 'package:rezeki_bundle_mobile/model/state.dart';
-import 'package:rezeki_bundle_mobile/screens/Login/login_screen.dart';
+import 'package:rezeki_bundle_mobile/model/user.dart';
 import 'package:rezeki_bundle_mobile/screens/Signup/components/background.dart';
-import 'package:rezeki_bundle_mobile/screens/Signup/components/or_divider.dart';
-import 'package:rezeki_bundle_mobile/screens/Signup/components/social_icon.dart';
-import 'package:rezeki_bundle_mobile/components/already_have_an_account_acheck.dart';
-import 'package:rezeki_bundle_mobile/components/rounded_button.dart';
-import 'package:rezeki_bundle_mobile/components/rounded_input_field.dart';
-import 'package:rezeki_bundle_mobile/components/rounded_password_field.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:async/async.dart';
 
+import 'profile_menu.dart';
+import 'profile_pic.dart';
+import 'package:async/async.dart';
 class Body extends StatefulWidget {
+   final User? userdata;
+  final String? token;
+     const Body({Key? key, required this.userdata, required this.token}) : super(key: key, );
   @override
   State<Body> createState() => _BodyState();
 }
 
 class _BodyState extends State<Body> {
-  bool _passwordVisible = true;
+    bool _passwordVisible = true;
+
   @override
   void initState() {
     super.initState();
@@ -31,39 +31,37 @@ class _BodyState extends State<Body> {
   }
 
   final AsyncMemoizer _memoizer = AsyncMemoizer();
-  final _formKey = GlobalKey<FormState>();
 
-  final emailTextController = TextEditingController();
-
-  final firstNameTextController = TextEditingController();
-  final lastNameTextController = TextEditingController();
-
-  final phoneNumberTextController = TextEditingController();
-  final postCodeTextController = TextEditingController();
-
-  final shippingAddressTextController = TextEditingController();
-
-  final passwordTextController = TextEditingController();
-
-  final confirmPasswordTextController = TextEditingController();
+ 
 
   //for gender dropdown variables
   String? selectedValue;
+
   var items = ['Male', 'Female'];
 
   //for states dropdown variables
   Negeri? _selectedStates;
+
   City? _selectedCities;
+
   var states;
+
   var cities;
+
   var check;
+
   List<Negeri> _statesList = [];
+
   List<City>? _cityList = [];
+
   List<City>? _onChangesCityList = [];
 
   var getGender;
+
   var getState;
+
   var getCity;
+
   getData() async {
     _statesList.clear();
 
@@ -92,9 +90,27 @@ class _BodyState extends State<Body> {
   }
 
   int val = -1;
+
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+ final _formKey = GlobalKey<FormState>();
+
+  final emailTextController = TextEditingController(text: widget.userdata!.email);
+
+  final firstNameTextController = TextEditingController(text: widget.userdata!.first_name);
+
+  final lastNameTextController = TextEditingController(text: widget.userdata!.last_name);
+
+  final phoneNumberTextController = TextEditingController(text: widget.userdata!.phone_number);
+
+  final postCodeTextController = TextEditingController(text: widget.userdata!.postcode.toString());
+
+
+
+  final passwordTextController = TextEditingController();
+
+  final confirmPasswordTextController = TextEditingController();
+      Size size = MediaQuery.of(context).size;
     return Background(
       child: SingleChildScrollView(
         child: Padding(
@@ -102,15 +118,9 @@ class _BodyState extends State<Body> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              const Text(
-                "SIGNUP",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
+               ProfilePic(token: widget.token, userdata: widget.userdata,),
               SizedBox(height: size.height * 0.03),
-              // SvgPicture.asset(
-              //   "assets/icons/signup.svg",
-              //   height: size.height * 0.35,
-              // ),
+         
 
               FutureBuilder(
                   future: _memoizer.runOnce(() => getData()),
@@ -267,27 +277,7 @@ class _BodyState extends State<Body> {
                                     return null;
                                   }),
                             ),
-                            TextFieldContainer(
-                              child: TextFormField(
-                                  maxLines: 6,
-                                  controller: shippingAddressTextController,
-                                  onChanged: (value) {},
-                                  cursorColor: kPrimaryColor,
-                                  decoration: const InputDecoration(
-                                    icon: Icon(
-                                      Icons.local_shipping_rounded,
-                                      color: kPrimaryColor,
-                                    ),
-                                    hintText: "Your Shipping Address",
-                                    border: InputBorder.none,
-                                  ),
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return "Please enter your shipping address";
-                                    }
-                                    return null;
-                                  }),
-                            ),
+                       
                             TextFieldContainer(
                               child: TextFormField(
                                   controller: postCodeTextController,
@@ -394,100 +384,110 @@ class _BodyState extends State<Body> {
                                 },
                               ),
                             ),
-                            TextFieldContainer(
-                              child: TextFormField(
-                                  controller: passwordTextController,
-                                  enableSuggestions: false,
-                                  autocorrect: false,
-                                  obscureText: _passwordVisible,
-                                  onChanged: (value) {},
-                                  cursorColor: kPrimaryColor,
-                                  decoration: InputDecoration(
-                                    icon: const Icon(
-                                      Icons.lock,
-                                      color: kPrimaryColor,
-                                    ),
-                                    suffixIcon: IconButton(
-                                      icon: const Icon(
-                                        Icons.visibility,
-                                        color: kPrimaryColor,
-                                      ),
-                                      onPressed: () {
-                                        setState(() {
-                                          _passwordVisible = !_passwordVisible;
-                                        });
-                                      },
-                                    ),
-                                    hintText: "Password",
-                                    border: InputBorder.none,
-                                  ),
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return "Please enter your password";
-                                    }
-                                    return null;
-                                  }),
-                            ),
-                            TextFieldContainer(
-                              child: TextFormField(
-                                  controller: confirmPasswordTextController,
-                                  enableSuggestions: false,
-                                  autocorrect: false,
-                                  obscureText: _passwordVisible,
-                                  onChanged: (value) {},
-                                  cursorColor: kPrimaryColor,
-                                  decoration: InputDecoration(
-                                    icon: const Icon(
-                                      Icons.lock,
-                                      color: kPrimaryColor,
-                                    ),
-                                    suffixIcon: IconButton(
-                                      icon: const Icon(
-                                        Icons.visibility,
-                                        color: kPrimaryColor,
-                                      ),
-                                      onPressed: () {
-                                        setState(() {
-                                          _passwordVisible = !_passwordVisible;
-                                        });
-                                      },
-                                    ),
-                                    hintText: "Confirm Password",
-                                    border: InputBorder.none,
-                                  ),
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return "Please enter to confirm your password";
-                                    } else if (confirmPasswordTextController
-                                            .text !=
-                                        passwordTextController.text) {
-                                      return 'Not match';
-                                    }
-                                    return null;
-                                  }),
-                            ),
+                            // TextFieldContainer(
+                            //   child: TextFormField(
+                            //       controller: passwordTextController,
+                            //       enableSuggestions: false,
+                            //       autocorrect: false,
+                            //       obscureText: _passwordVisible,
+                            //       onChanged: (value) {},
+                            //       cursorColor: kPrimaryColor,
+                            //       decoration: InputDecoration(
+                            //         icon: const Icon(
+                            //           Icons.lock,
+                            //           color: kPrimaryColor,
+                            //         ),
+                            //         suffixIcon: IconButton(
+                            //           icon: const Icon(
+                            //             Icons.visibility,
+                            //             color: kPrimaryColor,
+                            //           ),
+                            //           onPressed: () {
+                            //             setState(() {
+                            //               _passwordVisible = !_passwordVisible;
+                            //             });
+                            //           },
+                            //         ),
+                            //         hintText: "Password",
+                            //         border: InputBorder.none,
+                            //       ),
+                            //       validator: (value) {
+                            //         if (value == null || value.isEmpty) {
+                            //           return "Please enter your password";
+                            //         }
+                            //         return null;
+                            //       }),
+                            // ),
+                            // TextFieldContainer(
+                            //   child: TextFormField(
+                            //       controller: confirmPasswordTextController,
+                            //       enableSuggestions: false,
+                            //       autocorrect: false,
+                            //       obscureText: _passwordVisible,
+                            //       onChanged: (value) {},
+                            //       cursorColor: kPrimaryColor,
+                            //       decoration: InputDecoration(
+                            //         icon: const Icon(
+                            //           Icons.lock,
+                            //           color: kPrimaryColor,
+                            //         ),
+                            //         suffixIcon: IconButton(
+                            //           icon: const Icon(
+                            //             Icons.visibility,
+                            //             color: kPrimaryColor,
+                            //           ),
+                            //           onPressed: () {
+                            //             setState(() {
+                            //               _passwordVisible = !_passwordVisible;
+                            //             });
+                            //           },
+                            //         ),
+                            //         hintText: "Confirm Password",
+                            //         border: InputBorder.none,
+                            //       ),
+                            //       validator: (value) {
+                            //         if (value == null || value.isEmpty) {
+                            //           return "Please enter to confirm your password";
+                            //         } else if (confirmPasswordTextController
+                            //                 .text !=
+                            //             passwordTextController.text) {
+                            //           return 'Not match';
+                            //         }
+                            //         return null;
+                            //       }),
+                            // ),
                             RoundedButton(
-                              text: "SIGNUP",
+                              text: "Save",
                               press: () {
                                 print(getCity);
                                 if (_formKey.currentState != null) {
                                   if (_formKey.currentState!.validate()) {
-                                    registerAcc(
-                                        context,
-                                        firstNameTextController.text,
-                                        lastNameTextController.text,
-                                        emailTextController.text,
-                                        getGender,
-                                        phoneNumberTextController.text,
-                                        shippingAddressTextController.text,
-                                        postCodeTextController.text,
-                                        getState,
-                                        getCity,
-                                        passwordTextController.text);
+                                 
                                   } else {}
                                 }
                               },
                             ),
+                          Container(
+                              margin: EdgeInsets.symmetric(vertical: 10),
+                              width: size.width * 0.8,
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(29),
+                              child: ElevatedButton(
+                                child: const Text(
+                                  "Change Password",
+                                  style:  TextStyle(color: Colors.white,),
+                                ),
+                                onPressed: (){
+                                                      
+                                },
+                                style: ElevatedButton.styleFrom(
+                                    primary: Color.fromARGB(255, 251, 142, 242),
+                                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+                                    textStyle: TextStyle(
+                                        color:  Colors.white, fontSize: 14, fontWeight: FontWeight.w500)),
+                              ),
+                            ),
+                          )
                           ],
                         ),
                       );
@@ -496,43 +496,46 @@ class _BodyState extends State<Body> {
                     }
                   }),
 
-              SizedBox(height: size.height * 0.03),
-              AlreadyHaveAnAccountCheck(
-                login: false,
-                press: () {
-                 
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return LoginScreen();
-                      },
-                    ),
-                  );
-                },
-              ),
-              // OrDivider(),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.center,
-              //   children: <Widget>[
-              //     SocalIcon(
-              //       iconSrc: "assets/icons/facebook.svg",
-              //       press: () {},
-              //     ),
-              //     SocalIcon(
-              //       iconSrc: "assets/icons/twitter.svg",
-              //       press: () {},
-              //     ),
-              //     SocalIcon(
-              //       iconSrc: "assets/icons/google-plus.svg",
-              //       press: () {},
-              //     ),
-              //   ],
-              // )
+     
+        
             ],
           ),
         ),
       ),
     );
+    // return SingleChildScrollView(
+    //   padding: EdgeInsets.symmetric(vertical: 20),
+    //   child: Column(
+    //     children: [
+    //       ProfilePic(),
+    //       SizedBox(height: 20),
+    //       ProfileMenu(
+    //         text: "My Account",
+    //         icon: "assets/icons/User Icon.svg",
+    //         press: () => {},
+    //       ),
+    //       ProfileMenu(
+    //         text: "Notifications",
+    //         icon: "assets/icons/Bell.svg",
+    //         press: () {},
+    //       ),
+    //       ProfileMenu(
+    //         text: "Settings",
+    //         icon: "assets/icons/Settings.svg",
+    //         press: () {},
+    //       ),
+    //       ProfileMenu(
+    //         text: "Help Center",
+    //         icon: "assets/icons/Question mark.svg",
+    //         press: () {},
+    //       ),
+    //       ProfileMenu(
+    //         text: "Log Out",
+    //         icon: "assets/icons/Log out.svg",
+    //         press: () {},
+    //       ),
+    //     ],
+    //   ),
+    // );
   }
 }

@@ -24,7 +24,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
       appBar:  HomeHeader(token: widget.token, userdata: widget.userdata,),
       body: Body(token: widget.token, userdata: widget.userdata,),
-      bottomNavigationBar: CustomBottomNavBar(selectedMenu: MenuState.home),
+      bottomNavigationBar: CustomBottomNavBar(selectedMenu: MenuState.home, token: widget.token, userdata: widget.userdata,),
       // body: SingleChildScrollView(child: Column(children: [
       //   Container(
       //       height: 100,
