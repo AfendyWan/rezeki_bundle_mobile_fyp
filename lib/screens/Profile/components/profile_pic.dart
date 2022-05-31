@@ -19,48 +19,68 @@ class ProfilePic extends StatefulWidget {
 }
 
 class _ProfilePicState extends State<ProfilePic> {
+  
   final ImagePicker _picker = ImagePicker();
   XFile? _imageFile;
+  String? profileUrl;
+   getData() async {
+    profileUrl = await getProfilePhoto(widget.token, context, widget.userdata!.id);
+  }
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 115,
-      width: 115,
-      child: Stack(
-        fit: StackFit.expand,
-        clipBehavior: Clip.none,
-        children: [
-          CircleAvatar(
-            backgroundImage: AssetImage("assets/images/Profile Image.png"),
-          ),
-          Positioned(
-            right: -16,
-            bottom: 0,
-            child: SizedBox(
-              height: 46,
-              width: 46,
-              child: TextButton(
-                style: TextButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(50),
-                    side: BorderSide(color: Colors.white),
-                  ),
-                  primary: Colors.white,
-                  backgroundColor: Color(0xFFF5F6F9),
+    return FutureBuilder(
+          future: getData(),
+          builder: (context, projectSnap) {
+            if (projectSnap.connectionState == ConnectionState.none) {
+              return const SizedBox();
+            } else if (projectSnap.connectionState == ConnectionState.done) {
+              return SizedBox(
+                height: 115,
+                width: 115,
+                child: Stack(
+                  fit: StackFit.expand,
+                  clipBehavior: Clip.none,
+                  children: [
+                    CircleAvatar(
+                      backgroundImage: profileUrl == "failed"? 
+                      const NetworkImage('https://picsum.photos/250?image=9'):
+                      NetworkImage("http://192.168.0.157:8000"+profileUrl!)
+                       
+                    ),
+                    Positioned(
+                      right: -16,
+                      bottom: 0,
+                      child: SizedBox(
+                        height: 46,
+                        width: 46,
+                        child: TextButton(
+                          style: TextButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50),
+                              side: BorderSide(color: Colors.white),
+                            ),
+                            primary: Colors.white,
+                            backgroundColor: Color(0xFFF5F6F9),
+                          ),
+                          onPressed: () {
+                            showModalBottomSheet(
+                              context: context,
+                              builder: ((builder) => bottomSheet()),
+                            );
+                          },
+                          child:
+                              SvgPicture.asset("assets/icons/Camera Icon.svg"),
+                        ),
+                      ),
+                    )
+                  ],
                 ),
-                onPressed: () {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: ((builder) => bottomSheet()),
-                  );
-                },
-                child: SvgPicture.asset("assets/icons/Camera Icon.svg"),
-              ),
-            ),
-          )
-        ],
-      ),
-    );
+              );
+            } else {
+              return SizedBox();
+            }
+          }
+      );
   }
 
   Widget bottomSheet() {
@@ -115,6 +135,11 @@ class _ProfilePicState extends State<ProfilePic> {
       context,
       widget.userdata!.id,
       file,
+    );
+    profileUrl = await getProfilePhoto(
+      widget.token,
+      context,
+      widget.userdata!.id,
     );
     setState(() {});
   }
