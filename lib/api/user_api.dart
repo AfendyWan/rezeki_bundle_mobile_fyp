@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:rezeki_bundle_mobile/model/user.dart';
 
 changeProfilePhoto(context, userID, profileImage) async {
   var url = "http://192.168.0.157:8000/api/auth/changeProfilePhoto?";
@@ -24,7 +26,11 @@ changeProfilePhoto(context, userID, profileImage) async {
   } else {}
 }
 
-getProfilePhoto(token, context, userID,) async {
+getProfilePhoto(
+  token,
+  context,
+  userID,
+) async {
   //set api url
   final queryParameters = {
     'userID': userID.toString(),
@@ -38,7 +44,7 @@ getProfilePhoto(token, context, userID,) async {
   var url = "http://192.168.0.157:8000/api/auth/getProfilePhoto?";
   Uri uri = Uri.parse(url);
   final finalUri = uri.replace(queryParameters: queryParameters); //USE THIS
- print(finalUri);
+  print(finalUri);
   final response = await http.get(
     finalUri,
     headers: header,
@@ -53,5 +59,55 @@ getProfilePhoto(token, context, userID,) async {
     return jsonResponse;
   } else {
     print("Failedsss");
+  }
+}
+
+updateUserData(
+  context,
+  userID,
+  firstName,
+  lastName,
+  email,
+  gender,
+  phoneNumber,
+  postCode,
+) async {
+  var url = "http://192.168.0.157:8000/api/auth/updateUserData";
+
+  Map<String, String> headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+  };
+
+  var request = http.MultipartRequest('POST', Uri.parse(url));
+  request.headers.addAll(headers);
+  request.fields['userID'] = userID.toString();
+  request.fields['first_name'] = firstName.toString();
+  request.fields['last_name'] = lastName.toString();
+  request.fields['email'] = email.toString();
+  request.fields['gender'] = gender.toString();
+  request.fields['postcode'] = postCode;
+  request.fields['phone_number'] = phoneNumber.toString();
+
+  var response = await request.send();
+  var respStr = await http.Response.fromStream(response);
+  var jsonResponse = jsonDecode(respStr.body);
+  print(jsonResponse);
+  if (response.statusCode == 200) {
+    var success = "success";
+    return success;
+  } else {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            //  title: Text(error),
+            actions: [
+              TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text("OK"))
+            ],
+          );
+        });
   }
 }

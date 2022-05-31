@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rezeki_bundle_mobile/api/register_api.dart';
 import 'package:rezeki_bundle_mobile/api/setting_api.dart';
+import 'package:rezeki_bundle_mobile/api/user_api.dart';
 import 'package:rezeki_bundle_mobile/components/rounded_button.dart';
 import 'package:rezeki_bundle_mobile/components/text_field_container.dart';
 import 'package:rezeki_bundle_mobile/constants.dart';
@@ -13,16 +14,20 @@ import 'package:rezeki_bundle_mobile/screens/Signup/components/background.dart';
 import 'profile_menu.dart';
 import 'profile_pic.dart';
 import 'package:async/async.dart';
+
 class Body extends StatefulWidget {
-   final User? userdata;
+  final User? userdata;
   final String? token;
-     const Body({Key? key, required this.userdata, required this.token}) : super(key: key, );
+  const Body({Key? key, required this.userdata, required this.token})
+      : super(
+          key: key,
+        );
   @override
   State<Body> createState() => _BodyState();
 }
 
 class _BodyState extends State<Body> {
-    bool _passwordVisible = true;
+  bool _passwordVisible = true;
 
   @override
   void initState() {
@@ -31,8 +36,6 @@ class _BodyState extends State<Body> {
   }
 
   final AsyncMemoizer _memoizer = AsyncMemoizer();
-
- 
 
   //for gender dropdown variables
   String? selectedValue;
@@ -90,27 +93,28 @@ class _BodyState extends State<Body> {
   }
 
   int val = -1;
-
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
- final _formKey = GlobalKey<FormState>();
+    final emailTextController =
+        TextEditingController(text: widget.userdata!.email);
 
-  final emailTextController = TextEditingController(text: widget.userdata!.email);
+    final firstNameTextController =
+        TextEditingController(text: widget.userdata!.first_name);
 
-  final firstNameTextController = TextEditingController(text: widget.userdata!.first_name);
+    final lastNameTextController =
+        TextEditingController(text: widget.userdata!.last_name);
 
-  final lastNameTextController = TextEditingController(text: widget.userdata!.last_name);
+    final phoneNumberTextController =
+        TextEditingController(text: widget.userdata!.phone_number);
 
-  final phoneNumberTextController = TextEditingController(text: widget.userdata!.phone_number);
+    final postCodeTextController =
+        TextEditingController(text: widget.userdata!.postcode.toString());
 
-  final postCodeTextController = TextEditingController(text: widget.userdata!.postcode.toString());
+    final passwordTextController = TextEditingController();
 
-
-
-  final passwordTextController = TextEditingController();
-
-  final confirmPasswordTextController = TextEditingController();
-      Size size = MediaQuery.of(context).size;
+    final confirmPasswordTextController = TextEditingController();
+    Size size = MediaQuery.of(context).size;
     return Background(
       child: SingleChildScrollView(
         child: Padding(
@@ -118,10 +122,11 @@ class _BodyState extends State<Body> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-               ProfilePic(token: widget.token, userdata: widget.userdata,),
+              ProfilePic(
+                token: widget.token,
+                userdata: widget.userdata,
+              ),
               SizedBox(height: size.height * 0.03),
-         
-
               FutureBuilder(
                   future: _memoizer.runOnce(() => getData()),
                   builder: (context, snapshot) {
@@ -277,7 +282,7 @@ class _BodyState extends State<Body> {
                                     return null;
                                   }),
                             ),
-                       
+
                             TextFieldContainer(
                               child: TextFormField(
                                   controller: postCodeTextController,
@@ -303,87 +308,87 @@ class _BodyState extends State<Body> {
                                     return null;
                                   }),
                             ),
-                            TextFieldContainer(
-                              child: DropdownButtonFormField<Negeri>(
-                                isExpanded: true,
-                                decoration: const InputDecoration(
-                                    icon: Icon(
-                                      Icons.flag,
-                                      color: kPrimaryColor,
-                                    ),
-                                    enabledBorder: InputBorder.none,
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: 4, horizontal: 8)),
-                                hint: const Text(
-                                  "Please select your state",
-                                ),
-                                value: _selectedStates,
-                                items: _statesList.map((Negeri negeri) {
-                                  return DropdownMenuItem(
-                                      value: negeri,
-                                      child: Text(negeri.statesName!));
-                                }).toList(),
-                                onChanged: (value) async {
-                                  setState(() {
-                                    getState = value?.id;
-                                    _onChangesCityList?.clear();
+                            // TextFieldContainer(
+                            //   child: DropdownButtonFormField<Negeri>(
+                            //     isExpanded: true,
+                            //     decoration: InputDecoration(
+                            //         icon: Icon(
+                            //           Icons.flag,
+                            //           color: kPrimaryColor,
+                            //         ),
+                            //         enabledBorder: InputBorder.none,
+                            //         contentPadding: EdgeInsets.symmetric(
+                            //             vertical: 4, horizontal: 8)),
+                            //     hint: Text(
+                            //       "Please select your state",
+                            //     ),
+                            //     value: _selectedStates,
+                            //     items: _statesList.map((Negeri negeri) {
+                            //       return DropdownMenuItem(
+                            //           value: negeri,
+                            //           child: Text(negeri.statesName!));
+                            //     }).toList(),
+                            //     onChanged: (value) async {
+                            //       setState(() {
+                            //         getState = value?.id;
+                            //         _onChangesCityList?.clear();
 
-                                    if (_cityList != null) {
-                                      for (var data in _cityList!) {
-                                        if (data.statesId == value?.id) {
-                                          _onChangesCityList?.add(City(
-                                              id: data.id,
-                                              citiesName: data.citiesName,
-                                              statesId: data.statesId));
-                                        }
-                                      }
-                                      _selectedCities = _onChangesCityList![0];
-                                      getCity =
-                                          _onChangesCityList![0].citiesName;
-                                    }
-                                  });
-                                },
-                                validator: (value) {
-                                  if (value == null) {
-                                    return "Please select your state";
-                                  }
-                                  return null;
-                                },
-                              ),
-                            ),
-                            TextFieldContainer(
-                              child: DropdownButtonFormField<City>(
-                                isExpanded: true,
-                                decoration: const InputDecoration(
-                                    icon: Icon(
-                                      Icons.home_work_rounded,
-                                      color: kPrimaryColor,
-                                    ),
-                                    enabledBorder: InputBorder.none,
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: 4, horizontal: 8)),
-                                hint: Text(
-                                  "Please select your city",
-                                ),
-                                value: _selectedCities,
-                                items: _onChangesCityList?.map((City city) {
-                                  return DropdownMenuItem(
-                                      value: city,
-                                      child: Text(city.citiesName!));
-                                }).toList(),
-                                onChanged: (value) {
-                                  setState(() {
-                                    getCity = value!.citiesName;
-                                  });
-                                },
-                                validator: (value) {
-                                  if (value == null) {
-                                    return "Please select your city";
-                                  }
-                                  return null;
-                                },
-                              ),
-                            ),
+                            //         if (_cityList != null) {
+                            //           for (var data in _cityList!) {
+                            //             if (data.statesId == value?.id) {
+                            //               _onChangesCityList?.add(City(
+                            //                   id: data.id,
+                            //                   citiesName: data.citiesName,
+                            //                   statesId: data.statesId));
+                            //             }
+                            //           }
+                            //           _selectedCities = _onChangesCityList![0];
+                            //           getCity =
+                            //               _onChangesCityList![0].citiesName;
+                            //         }
+                            //       });
+                            //     },
+                            //     validator: (value) {
+                            //       if (value == null) {
+                            //         return "Please select your state";
+                            //       }
+                            //       return null;
+                            //     },
+                            //   ),
+                            // ),
+                            // TextFieldContainer(
+                            //   child: DropdownButtonFormField<City>(
+                            //     isExpanded: true,
+                            //     decoration: const InputDecoration(
+                            //         icon: Icon(
+                            //           Icons.home_work_rounded,
+                            //           color: kPrimaryColor,
+                            //         ),
+                            //         enabledBorder: InputBorder.none,
+                            //         contentPadding: EdgeInsets.symmetric(
+                            //             vertical: 4, horizontal: 8)),
+                            //     hint: Text(
+                            //       "Please select your city",
+                            //     ),
+                            //     value: _selectedCities,
+                            //     items: _onChangesCityList?.map((City city) {
+                            //       return DropdownMenuItem(
+                            //           value: city,
+                            //           child: Text(city.citiesName!));
+                            //     }).toList(),
+                            //     onChanged: (value) {
+                            //       setState(() {
+                            //         getCity = value!.citiesName;
+                            //       });
+                            //     },
+                            //     validator: (value) {
+                            //       if (value == null) {
+                            //         return "Please select your city";
+                            //       }
+                            //       return null;
+                            //     },
+                            //   ),
+                            // ),
                             // TextFieldContainer(
                             //   child: TextFormField(
                             //       controller: passwordTextController,
@@ -458,36 +463,80 @@ class _BodyState extends State<Body> {
                             // ),
                             RoundedButton(
                               text: "Save",
-                              press: () {
+                              press: () async {
                                 print(getCity);
                                 if (_formKey.currentState != null) {
                                   if (_formKey.currentState!.validate()) {
+                                    var result = await updateUserData(
+                                      context,
+                                      widget.userdata!.id,
+                                      firstNameTextController.text,
+                                      lastNameTextController.text,
+                                      emailTextController.text,
+                                      getGender,
+                                      phoneNumberTextController.text,
+                                      postCodeTextController.text,
+                                      // getState,
+                                      // getCity,
+                                    );
                                  
+                                    if (result == "success") {
+                                      widget.userdata!.first_name =
+                                          firstNameTextController.text;
+                                      widget.userdata!.last_name =
+                                          lastNameTextController.text;
+                                      widget.userdata!.email =
+                                          emailTextController.text;
+                                      widget.userdata!.gender = getGender;
+                                      widget.userdata!.phone_number =
+                                          phoneNumberTextController.text;
+                                      widget.userdata!.postcode = int.parse(
+                                          postCodeTextController.text);
+                                      setState(() {});
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: const Text(
+                                                  "User profile saved successfully"),
+                                              actions: [
+                                                TextButton(
+                                                    onPressed: () =>
+                                                        Navigator.pop(context),
+                                                    child: const Text("OK"))
+                                              ],
+                                            );
+                                          });
+                                    }
                                   } else {}
                                 }
                               },
                             ),
-                          Container(
+                            Container(
                               margin: EdgeInsets.symmetric(vertical: 10),
                               width: size.width * 0.8,
-                            child: ClipRRect(
+                              child: ClipRRect(
                                 borderRadius: BorderRadius.circular(29),
-                              child: ElevatedButton(
-                                child: const Text(
-                                  "Change Password",
-                                  style:  TextStyle(color: Colors.white,),
+                                child: ElevatedButton(
+                                  child: const Text(
+                                    "Change Password",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  onPressed: () {},
+                                  style: ElevatedButton.styleFrom(
+                                      primary:
+                                          Color.fromARGB(255, 251, 142, 242),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 40, vertical: 20),
+                                      textStyle: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500)),
                                 ),
-                                onPressed: (){
-                                                      
-                                },
-                                style: ElevatedButton.styleFrom(
-                                    primary: Color.fromARGB(255, 251, 142, 242),
-                                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-                                    textStyle: TextStyle(
-                                        color:  Colors.white, fontSize: 14, fontWeight: FontWeight.w500)),
                               ),
-                            ),
-                          )
+                            )
                           ],
                         ),
                       );
@@ -495,9 +544,6 @@ class _BodyState extends State<Body> {
                       return const CircularProgressIndicator();
                     }
                   }),
-
-     
-        
             ],
           ),
         ),
