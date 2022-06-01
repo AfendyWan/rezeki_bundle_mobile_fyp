@@ -9,6 +9,7 @@ import 'package:rezeki_bundle_mobile/constants.dart';
 import 'package:rezeki_bundle_mobile/model/city.dart';
 import 'package:rezeki_bundle_mobile/model/state.dart';
 import 'package:rezeki_bundle_mobile/model/user.dart';
+import 'package:rezeki_bundle_mobile/screens/Profile/components/change_password.dart';
 import 'package:rezeki_bundle_mobile/screens/Signup/components/background.dart';
 
 import 'profile_menu.dart';
@@ -524,7 +525,20 @@ class _BodyState extends State<Body> {
                                       color: Colors.white,
                                     ),
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                       Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                ChangePassword(
+                                                    token: widget.token,
+                                                    userdata: widget.userdata,
+                                                   
+                                                    key: widget.key,
+                                                ),
+                                            )
+                                          );
+                                  },
                                   style: ElevatedButton.styleFrom(
                                       primary:
                                           Color.fromARGB(255, 251, 142, 242),

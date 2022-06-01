@@ -111,3 +111,48 @@ updateUserData(
         });
   }
 }
+
+changeUserPassword(context, userID, newPassord, oldPassword) async {
+  var url = "http://192.168.0.157:8000/api/auth/changeUserPassword";
+
+  Map<String, String> headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+  };
+ print(oldPassword);
+  var request = http.MultipartRequest('POST', Uri.parse(url));
+  request.headers.addAll(headers);
+  request.fields['userID'] = userID.toString();
+
+  request.fields['newPassword'] = newPassord;
+  request.fields['oldPassword'] = oldPassword;
+
+  var response = await request.send();
+  var respStr = await http.Response.fromStream(response);
+  var jsonResponse = jsonDecode(respStr.body);
+
+  print(jsonResponse);
+  if (response.statusCode == 200) {
+    var results = "success";
+    return results;
+  } else if (response.statusCode == 402) {
+    var results = "passwordNotMatch";
+    return results;
+  } else if (response.statusCode == 403) {
+    var results = "validation";
+    return results;
+  } else {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            //  title: Text(error),
+            actions: [
+              TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text("OK"))
+            ],
+          );
+        });
+  }
+}
