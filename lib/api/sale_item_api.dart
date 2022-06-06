@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
@@ -116,6 +117,41 @@ getPromotionSaleItemList() async {
     List<SaleItem> saleItem = List<SaleItem>.from(
         jsonResponse.map((model) => SaleItem.fromJson(model)));
    
+    return saleItem;
+  } else {
+    print("Failed");
+  }
+}
+
+searchSaleItem(token, saleItemName) async {
+  //set api url
+  final queryParameters = {
+    'saleItemName': saleItemName.toString(),
+  };
+
+  Map<String, String> header = {
+    HttpHeaders.authorizationHeader: "Token $token",
+    HttpHeaders.contentTypeHeader: "application/json"
+  };
+
+  var url = "http://192.168.0.157:8000/api/saleItem/searchSaleItem?";
+
+  Uri uri = Uri.parse(url);
+  final finalUri = uri.replace(queryParameters: queryParameters); //USE THIS
+
+  final response = await http.post(
+    finalUri,
+    headers: header,
+  );
+
+  var respStr = response.body;
+  var jsonResponse = jsonDecode(respStr);
+
+  //get api result
+  if (response.statusCode == 200) {
+    List<SaleItem> saleItem = List<SaleItem>.from(
+        jsonResponse.map((model) => SaleItem.fromJson(model)));
+
     return saleItem;
   } else {
     print("Failed");

@@ -34,7 +34,8 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                SearchField(),
+                SearchField( token: token,
+                                    userdata: userdata,),
                 IconBtnWithCounter(
                     svgSrc: "assets/icons/Cart Icon.svg",
                     press: () {
