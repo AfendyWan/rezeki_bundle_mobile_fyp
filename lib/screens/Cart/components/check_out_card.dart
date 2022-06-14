@@ -5,6 +5,7 @@ import 'package:rezeki_bundle_mobile/components/size_config.dart';
 import 'package:rezeki_bundle_mobile/constants.dart';
 import 'package:rezeki_bundle_mobile/model/cart.dart';
 import 'package:rezeki_bundle_mobile/model/user.dart';
+import 'package:rezeki_bundle_mobile/screens/Checkout/checkout_screen.dart';
 
 
 class CheckoutCard extends StatefulWidget {
@@ -96,7 +97,19 @@ class _CheckoutCardState extends State<CheckoutCard> {
                   width: getProportionateScreenWidth(190),
                   child: DefaultButton(
                     text: "Check Out",
-                    press: () {},
+                    press: () {
+                                     Navigator.push(
+                         
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                CheckoutScreen(
+                                    token: widget.token,
+                                    userdata: widget.userdata,
+                                  )
+                              )
+                            );   
+                    },
                   ),
                 ),
               ],

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:rezeki_bundle_mobile/model/city.dart';
+import 'package:rezeki_bundle_mobile/model/settings.dart';
 import 'package:rezeki_bundle_mobile/model/state.dart';
 import 'package:rezeki_bundle_mobile/model/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -45,8 +46,30 @@ getAllCities() async {
 
     List<City> city =
         List<City>.from(jsonResponse.map((model) => City.fromJson(model)));
-    
+
     return city;
+  } else {
+    print("Failed");
+  }
+}
+
+getAdminSettings() async {
+  var url = "http://192.168.0.157:8000/api/settings/getAdminSettings";
+
+  var response = await http.get(Uri.parse(url), headers: {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+  });
+
+
+  //get api result
+  if (response.statusCode == 200) {
+    var jsonResponse = jsonDecode(response.body);
+
+    List<Setting> setting = List<Setting>.from(
+        jsonResponse.map((model) => Setting.fromJson(model)));
+  print(setting);
+    return setting;
   } else {
     print("Failed");
   }
