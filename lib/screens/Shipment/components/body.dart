@@ -9,6 +9,7 @@ import 'package:rezeki_bundle_mobile/model/cart_item.dart';
 import 'package:rezeki_bundle_mobile/model/user.dart';
 import 'package:rezeki_bundle_mobile/model/user_shipping_address.dart';
 import 'package:rezeki_bundle_mobile/screens/Cart/components/check_out_card.dart';
+import 'package:rezeki_bundle_mobile/screens/Shipment/components/shipment_form.dart';
 
 import 'cart_card.dart';
 import 'package:async/async.dart';
@@ -120,26 +121,40 @@ class _BodyState extends State<Body> {
                               ],
                             ),
                           ),
-                          child: Card(
-                            borderOnForeground: true,
-                            elevation: 0,
-                            color:   _userShippingList[index].shipping_default_status.toString() == "1" ? Color.fromARGB(255, 113, 255, 153):Colors.transparent,                           child: Column(
-                              children: [
-                                ListTile(
-                                  dense: false,
-                                  leading: Icon(Icons.place),
-                                  title: Text('Delivery Addresses:'),
-                                  subtitle: Text(
-                                      _userShippingList[index].shipping_address.toString() +
-                                          ", " +
-                                          _userShippingList[index].postcode.toString() +
-                                          ", " +
-                                          _userShippingList[index].city.toString() +
-                                          ", " + _userStateList[index]),
-                                  trailing: Icon(Icons.arrow_forward_ios_rounded),
-                                ),
-                               
-                              ],
+                          child: GestureDetector(
+                            onTap: (){
+                                        Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ShipmentForm(
+                                  token: widget.token,
+                                  userdata: widget.userdata,
+                                  key: widget.key,
+                                  isEdit: true,
+                                  userShippingAddress: _userShippingList[index],
+                                )));
+                            },
+                            child: Card(
+                              borderOnForeground: true,
+                              elevation: 0,
+                              color:   _userShippingList[index].shipping_default_status.toString() == "1" ? Color.fromARGB(255, 113, 255, 153):Colors.transparent,                           child: Column(
+                                children: [
+                                  ListTile(
+                                    dense: false,
+                                    leading: Icon(Icons.place),
+                                    title: Text('Delivery Addresses:'),
+                                    subtitle: Text(
+                                        _userShippingList[index].shipping_address.toString() +
+                                            ", " +
+                                            _userShippingList[index].postcode.toString() +
+                                            ", " +
+                                            _userShippingList[index].city.toString() +
+                                            ", " + _userStateList[index]),
+                                    trailing: Icon(Icons.arrow_forward_ios_rounded),
+                                  ),
+                                 
+                                ],
+                              ),
                             ),
                           ),
                           //CartCard(cart: _cartItemList[index]),
@@ -156,7 +171,18 @@ class _BodyState extends State<Body> {
               padding: const EdgeInsets.all(8.0),
               child: DefaultButton(
                       text: "Add New Shipping Address",
-                      press: () {},
+                      press: () {
+                          Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ShipmentForm(
+                                  token: widget.token,
+                                  userdata: widget.userdata,
+                                  isEdit: false,
+                                  key: widget.key,
+                                )));
+                        
+                      },
           ),
             ),
             SizedBox(height: 10,)
