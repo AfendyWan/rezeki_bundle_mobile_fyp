@@ -10,6 +10,7 @@ import 'package:rezeki_bundle_mobile/model/state.dart';
 import 'package:rezeki_bundle_mobile/model/user.dart';
 import 'package:rezeki_bundle_mobile/model/user_shipping_address.dart';
 import 'package:rezeki_bundle_mobile/screens/Checkout/components/place_order_card.dart';
+import 'package:rezeki_bundle_mobile/screens/Shipment/shipment_screen.dart';
 
 import 'cart_card.dart';
 import 'package:async/async.dart';
@@ -81,12 +82,12 @@ class _BodyState extends State<Body> {
       final value = mapEntry.value;
       if (value.toString() == _userShippingAddress!.state.toString()) {
         userStates = key;
-        print("fdadfasd");
+      
         print(userStates);
       }
-       print(_userShippingAddress!.state);
-       print(value);
-      print('Key: $key, Value: $value'); // Key: a, Value: 1 ...
+      //  print(_userShippingAddress!.state);
+      //  print(value);
+      // print('Key: $key, Value: $value'); // Key: a, Value: 1 ...
     }
   }
 
@@ -114,19 +115,35 @@ class _BodyState extends State<Body> {
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              ListTile(
-                                dense: false,
-                                leading: Icon(Icons.place),
-                                title: Text('Delivery Addresses:'),
-                                subtitle: Text(_userShippingAddress!
-                                        .shipping_address
-                                        .toString() +
-                                    ", " +
-                                    _userShippingAddress!.postcode.toString() +
-                                    ", " +
-                                    _userShippingAddress!.city.toString() +
-                                    ", " +userStates),
-                                trailing: Icon(Icons.arrow_forward_ios_rounded),
+                              GestureDetector(
+                                onTap: (){
+                                         Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                ShipmentScreen(
+                                                  token: widget.token,
+                                                  userdata: widget.userdata,
+                                                  key: widget.key,
+                                                )
+                                          )
+                                        );
+                                },
+                                child: ListTile(
+                                  dense: false,
+                                  leading: Icon(Icons.place),
+                                  title: Text('Delivery Addresses:'),
+                                  subtitle: Text(_userShippingAddress!
+                                          .shipping_address
+                                          .toString() +
+                                      ", " +
+                                      _userShippingAddress!.postcode.toString() +
+                                      ", " +
+                                      _userShippingAddress!.city.toString() +
+                                      ", " +userStates),
+                                  trailing: Icon(Icons.arrow_forward_ios_rounded
+                                  ),
+                                ),
                               ),
                             ],
                           ),
