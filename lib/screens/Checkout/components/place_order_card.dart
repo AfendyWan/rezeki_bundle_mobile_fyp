@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart';
@@ -12,6 +13,7 @@ import 'package:rezeki_bundle_mobile/model/settings.dart';
 import 'package:rezeki_bundle_mobile/model/user.dart';
 import 'package:async/async.dart';
 import 'package:rezeki_bundle_mobile/model/user_shipping_address.dart';
+import 'package:open_file/open_file.dart';
 
 class PlaceOrderCard extends StatefulWidget {
   final User? userdata;
@@ -33,7 +35,7 @@ class PlaceOrderCard extends StatefulWidget {
 
 class _PlaceOrderCardState extends State<PlaceOrderCard> {
   final AsyncMemoizer _memoizer = AsyncMemoizer();
-
+  var fileResult;
   List<Setting> _settingList = [];
 
   var settings;
@@ -57,7 +59,6 @@ class _PlaceOrderCardState extends State<PlaceOrderCard> {
 
       if (data.key == "Sabah courier delivery shipping fee") {
         if (_userShippingAddress!.state == "10") {
-       
           _settingList.add(Setting(key: data.key, value: data.value));
         }
       }
@@ -85,7 +86,19 @@ class _PlaceOrderCardState extends State<PlaceOrderCard> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
+    String? selectedValue;
+    var items = [
+      'Pos Laju',
+      'GDex',
+      'ABX Express',
+      'J&T Express',
+      'Skynet Express',
+      'Citylink',
+      'DHL Express',
+      'FedEx',
+      'Easy Parcel'
+    ];
+    var getShippingCourier;
     String getDate() {
       if (date == null) {
         return "Select date";
@@ -221,60 +234,62 @@ class _PlaceOrderCardState extends State<PlaceOrderCard> {
                               },
                             ),
                           ),
-                          getSettingKey.toString() == "local delivery"?
-                          Container(
-                              margin: EdgeInsets.symmetric(vertical: 10),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 5),
-                              width: size.width * 0.8,
-                              decoration: BoxDecoration(
-                                color: kPrimaryLightColor,
-                                borderRadius: BorderRadius.circular(29),
-                              ),
-                              child: TextFormField(
-                                key: Key(getDate()),
-                                initialValue: getDate(),
-                                decoration: const InputDecoration(
-                                  icon: Icon(
-                                    Icons.calendar_month_rounded,
-                                    color: kPrimaryColor,
+                          getSettingKey.toString() == "local delivery"
+                              ? Container(
+                                  margin: EdgeInsets.symmetric(vertical: 10),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 5),
+                                  width: size.width * 0.8,
+                                  decoration: BoxDecoration(
+                                    color: kPrimaryLightColor,
+                                    borderRadius: BorderRadius.circular(29),
                                   ),
-                                  hintText: "Date",
-                                  border: InputBorder.none,
-                                ),
-                                showCursor: true,
-                                readOnly: true,
-                                onTap: () {
-                                  _selectDate(context);
-                                },
-                              )):SizedBox(),
-                                 getSettingKey.toString() == "local delivery"?
-                          Container(
-                              margin: EdgeInsets.symmetric(vertical: 10),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 5),
-                              width: size.width * 0.8,
-                              decoration: BoxDecoration(
-                                color: kPrimaryLightColor,
-                                borderRadius: BorderRadius.circular(29),
-                              ),
-                              child: TextFormField(
-                                key: Key(getTime()),
-                                initialValue: getTime(),
-                                decoration: const InputDecoration(
-                                  icon: Icon(
-                                    Icons.timer,
-                                    color: kPrimaryColor,
+                                  child: TextFormField(
+                                    key: Key(getDate()),
+                                    initialValue: getDate(),
+                                    decoration: const InputDecoration(
+                                      icon: Icon(
+                                        Icons.calendar_month_rounded,
+                                        color: kPrimaryColor,
+                                      ),
+                                      hintText: "Date",
+                                      border: InputBorder.none,
+                                    ),
+                                    showCursor: true,
+                                    readOnly: true,
+                                    onTap: () {
+                                      _selectDate(context);
+                                    },
+                                  ))
+                              : SizedBox(),
+                          getSettingKey.toString() == "local delivery"
+                              ? Container(
+                                  margin: EdgeInsets.symmetric(vertical: 10),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 5),
+                                  width: size.width * 0.8,
+                                  decoration: BoxDecoration(
+                                    color: kPrimaryLightColor,
+                                    borderRadius: BorderRadius.circular(29),
                                   ),
-                                  hintText: "Time",
-                                  border: InputBorder.none,
-                                ),
-                                showCursor: true,
-                                readOnly: true,
-                                onTap: () {
-                                  _selectTime(context);
-                                },
-                              )):SizedBox(),
+                                  child: TextFormField(
+                                    key: Key(getTime()),
+                                    initialValue: getTime(),
+                                    decoration: const InputDecoration(
+                                      icon: Icon(
+                                        Icons.timer,
+                                        color: kPrimaryColor,
+                                      ),
+                                      hintText: "Time",
+                                      border: InputBorder.none,
+                                    ),
+                                    showCursor: true,
+                                    readOnly: true,
+                                    onTap: () {
+                                      _selectTime(context);
+                                    },
+                                  ))
+                              : SizedBox(),
                         ],
                       ),
                     );
@@ -308,15 +323,112 @@ class _PlaceOrderCardState extends State<PlaceOrderCard> {
                 SizedBox(
                   width: getProportionateScreenWidth(190),
                   child: DefaultButton(
-                    text: "Place Order",
-                    press: () {},
-                  ),
-                ),
+                      text: "Place Order",
+                      press: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return StatefulBuilder(
+                              builder: ((context, setState) {
+                               return  AlertDialog(
+                                    scrollable: true,
+                                    title: Text('Payment Form'),
+                                    content: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Form(
+                                        child: Column(
+                                          children: <Widget>[
+                                            getSettingKey.toString() == "local delivery" ? TextFieldContainer(
+                                              child: DropdownButtonFormField<
+                                                  String>(
+                                                decoration:
+                                                    const InputDecoration(
+                                                        icon: Icon(
+                                                          Icons.toys,
+                                                          color: kPrimaryColor,
+                                                        ),
+                                                        enabledBorder:
+                                                            InputBorder.none,
+                                                        contentPadding:
+                                                            EdgeInsets.symmetric(
+                                                                vertical: 4,
+                                                                horizontal: 8)),
+                                                hint: const Text(
+                                                  "Shipping Courier",
+                                                ),
+                                                value: selectedValue,
+                                                items:
+                                                    items.map((String items) {
+                                                  return DropdownMenuItem(
+                                                      value: items,
+                                                      child: Text(items));
+                                                }).toList(),
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    getShippingCourier = value;
+                                                  });
+                                                },
+                                                validator: (value) {
+                                                  if (value == null) {
+                                                    return "Please select default status";
+                                                  }
+                                                  return null;
+                                                },
+                                              ),
+                                            ):SizedBox(),
+                                            TextFieldContainer(
+                                              child: TextFormField(
+                                                initialValue:  fileResult == null? "Upload Receipt": "Receipt Ready",
+                                                decoration: InputDecoration(
+                                                  icon: fileResult == null
+                                                      ? Icon(
+                                                          Icons.file_upload,
+                                                          color: kPrimaryColor,
+                                                        )
+                                                      : Icon(
+                                                          Icons.done,
+                                                          color: kPrimaryColor,
+                                                        ),
+                                                  hintText: "Date",
+                                                  border: InputBorder.none,
+                                                ),
+                                                showCursor: true,
+                                                readOnly: true,
+                                                onTap: () async {
+                                                
+                                                  fileResult = await FilePicker
+                                                      .platform
+                                                      .pickFiles();
+                                                  setState(() {});
+                                                  if (fileResult == null) {
+                                                    return;
+                                                  }
+
+                                                  final file =
+                                                      fileResult.files.first;
+                                                  //penFile(file);
+                                                },
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ));
+                              }),
+                            );
+                          },
+                        );
+                      }),
+                )
               ],
             ),
           ],
         ),
       ),
     );
+  }
+
+  void openFile(PlatformFile file) {
+    OpenFile.open(file.path);
   }
 }
