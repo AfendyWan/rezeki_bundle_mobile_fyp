@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:rezeki_bundle_mobile/components/size_config.dart';
 import 'package:rezeki_bundle_mobile/model/user.dart';
 import 'package:rezeki_bundle_mobile/screens/Feedback/view_feedback_screen.dart';
+import 'package:rezeki_bundle_mobile/screens/Order/order_screen.dart';
 import 'package:rezeki_bundle_mobile/screens/PromotionSaleItem/promotion_sale_item_screen.dart';
 import 'package:rezeki_bundle_mobile/screens/WishList/wish_list_screen.dart';
 
@@ -19,7 +20,7 @@ class _CategoriesState extends State<Categories> {
   Widget build(BuildContext context) {
     List<Map<String, dynamic>> categories = [
       {"icon": "assets/icons/Flash Icon.svg", "text": "Flash Deal"},
-      {"icon": "assets/icons/Bill Icon.svg", "text": "Transact"},
+      {"icon": "assets/icons/Bill Icon.svg", "text": "Order"},
       {"icon": "assets/icons/Shop Icon.svg", "text": "Ship"},
       {"icon": "assets/icons/Gift Icon.svg", "text": "Wish"},
       {"icon": "assets/icons/Discover.svg", "text": "Feeds"},
@@ -66,6 +67,18 @@ class _CategoriesState extends State<Categories> {
                     MaterialPageRoute(
                       builder: (context) =>
                           ViewFeedbackScreen(
+                            token: widget.token,
+                            userdata: widget.userdata,
+                            key: widget.key,
+                          )
+                    )
+                  );
+              }else if(categories[index]["text"] == "Order"){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          OrderScreen(
                             token: widget.token,
                             userdata: widget.userdata,
                             key: widget.key,
