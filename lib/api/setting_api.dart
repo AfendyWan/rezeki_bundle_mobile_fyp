@@ -74,3 +74,24 @@ getAdminSettings() async {
     print("Failed");
   }
 }
+
+getAdminAnnouncement() async {
+  var url = "http://192.168.0.157:8000/api/settings/getAdminAnnouncement";
+
+  var response = await http.get(Uri.parse(url), headers: {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+  });
+
+
+  //get api result
+  if (response.statusCode == 200) {
+    var jsonResponse = jsonDecode(response.body);
+
+   
+  print(jsonResponse);
+    return jsonResponse;
+  } else {
+    print("Failed");
+  }
+}
