@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:rezeki_bundle_mobile/model/user.dart';
 import 'package:rezeki_bundle_mobile/screens/Dashboard/dashboard.dart';
+import 'package:rezeki_bundle_mobile/screens/Feedback/view_feedback_screen.dart';
 import 'package:rezeki_bundle_mobile/screens/Profile/profile_screen.dart';
 import 'package:rezeki_bundle_mobile/screens/WishList/wish_list_screen.dart';
 
@@ -71,6 +72,9 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
                   ),
               IconButton(
                 icon: SvgPicture.asset("assets/icons/Heart Icon.svg"),
+                 color: MenuState.favourite == widget.selectedMenu
+                        ? kPrimaryColor
+                        : inActiveIconColor,
                 onPressed: () {
                              Navigator.push(
                         context,
@@ -84,7 +88,21 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
               ),
               IconButton(
                 icon: SvgPicture.asset("assets/icons/Chat bubble Icon.svg"),
-                onPressed: () {},
+                 color: MenuState.message == widget.selectedMenu
+                        ? kPrimaryColor
+                        : inActiveIconColor,
+                onPressed: () {
+                   Navigator.push(
+                        context,
+                              MaterialPageRoute(
+                      builder: (context) =>
+                          ViewFeedbackScreen(
+                            token: widget.token,
+                            userdata: widget.userdata,
+                            key: widget.key,
+                          )
+                    ));
+                },
               ),
               IconButton(
                   icon: SvgPicture.asset(

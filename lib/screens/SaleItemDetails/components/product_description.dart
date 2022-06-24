@@ -215,25 +215,25 @@ class _ProductDescriptionState extends State<ProductDescription> {
                     horizontal: getProportionateScreenWidth(20),
                     vertical: getProportionateScreenHeight(10),
                   ),
-                  child: GestureDetector(
-                    onTap: () {},
-                    child: Row(
-                      children: const [
-                        Text(
-                          "See More Detail",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              color: kPrimaryColor),
-                        ),
-                        SizedBox(width: 5),
-                        Icon(
-                          Icons.arrow_forward_ios,
-                          size: 12,
-                          color: kPrimaryColor,
-                        ),
-                      ],
-                    ),
-                  ),
+                  // child: GestureDetector(
+                  //   onTap: () {},
+                  //   child: Row(
+                  //     children: const [
+                  //       Text(
+                  //         "See More Detail",
+                  //         style: TextStyle(
+                  //             fontWeight: FontWeight.w600,
+                  //             color: kPrimaryColor),
+                  //       ),
+                  //       SizedBox(width: 5),
+                  //       Icon(
+                  //         Icons.arrow_forward_ios,
+                  //         size: 12,
+                  //         color: kPrimaryColor,
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                 ),
               ],
             );

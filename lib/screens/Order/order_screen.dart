@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rezeki_bundle_mobile/api/cart_api.dart';
+import 'package:rezeki_bundle_mobile/components/appbar.dart';
 import 'package:rezeki_bundle_mobile/model/cart.dart';
 import 'package:rezeki_bundle_mobile/model/user.dart';
 
@@ -33,7 +34,7 @@ class _OrderScreenState extends State<OrderScreen> {
   Widget build(BuildContext context) {
  
     return Scaffold(
-              appBar: buildAppBar(context, 1),
+              appBar: appbar(title: "Order History", context: context),
               body: 
               Body(
                 token: widget.token,
@@ -42,28 +43,6 @@ class _OrderScreenState extends State<OrderScreen> {
               
             );
   }
-
-  AppBar buildAppBar(BuildContext context, int checkFutureBuilder) {
-    return AppBar(
-      leading: IconButton(
-        icon: Icon(Icons.arrow_back_ios_new_rounded, color: Colors.black),
-        onPressed: () => Navigator.of(context).pop(),
-      ),
-      backgroundColor: Color.fromARGB(221, 255, 212, 253),
-      elevation: 0,
-      centerTitle: true,
-      title: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            "Order History",
-            style: TextStyle(color: Colors.black),
-          ),
-   
-        ],
-      ),
-    );
-  }
   
 }
+

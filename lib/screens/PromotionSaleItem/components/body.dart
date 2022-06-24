@@ -78,81 +78,77 @@ class _BodyState extends State<Body> {
                   return const CircularProgressIndicator();
                 } else {
                   print('project snapshot data is: ${projectSnap.data}');
-                  return SingleChildScrollView(
-                    child: Column(
-                      children: [
-                     
-                        Align(
-                          alignment: AlignmentDirectional.bottomCenter, // <--
-                          child: GridView.count(
-                            physics: const ScrollPhysics(),
-                            crossAxisCount: 2,
-                            shrinkWrap: true,
-                            children: List.generate(
-                                _saleItemPromotionList.length, (index) {
-                              return Padding(
-                                padding: EdgeInsets.only(left: 15, right: 15),
-                                child: SizedBox(
-                                  width: getProportionateScreenWidth(140),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                         Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                SaleItemDetailsScreen(
-                                                    token: widget.token,
-                                                    userdata: widget.userdata,
-                                                    saleItem: _saleItemPromotionList[index],
-                                                    key: widget.key,
-                                                ),
-                                            )
-                                          );
-                                    },
-                                    child: Column(
-                                      children: [
-                                      Card(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
+                  return GridView.builder(
+                    physics: const ScrollPhysics(),
+                     gridDelegate:
+                  SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2),
+                   
+                    itemCount: _saleItemPromotionList.length,
+                     itemBuilder: (context, index) => Card(
+                        child: GridTile(child:     Center(
+                          child: Padding(
+                        padding: EdgeInsets.only(left: 15, right: 15),
+                        child: SizedBox(
+                          width: getProportionateScreenWidth(140),
+                          child: GestureDetector(
+                            onTap: () {
+                                 Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                        SaleItemDetailsScreen(
+                                            token: widget.token,
+                                            userdata: widget.userdata,
+                                            saleItem: _saleItemPromotionList[index],
+                                            key: widget.key,
                                         ),
-                                        margin: EdgeInsets.all(10),
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                          ),
-                                          child: Column(children: [
-                                            AspectRatio(
-                                              aspectRatio: 1.02,
-                                              child: Hero(
-                                                  tag: _saleItemPromotionList[index]
-                                                      .id!,
-                                                  child: Image.network(
-                                                      "http://192.168.0.157:8000" +
-                                                          _saleItemPromotionList[
-                                                                  index]
-                                                              .url!)),
-                                            ),
-                                            const SizedBox(height: 10),
-                                            Text(
-                                              _saleItemPromotionList[index].itemName!,
-                                              style: TextStyle(
-                                                  color: Colors.black),
-                                              maxLines: 2,
-                                            ),
-                                          ]),
-                                        ),
-                                      ),
-                                    ]),
-                                  ),
+                                    )
+                                  );
+                            },
+                            child: Column(
+                              children: [
+                              Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.circular(10.0),
                                 ),
-                              );
-                            }),
+                                margin: EdgeInsets.all(10),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.circular(15),
+                                  ),
+                                  child: Column(children: [
+                                    AspectRatio(
+                                      aspectRatio: 1.02,
+                                      child: Hero(
+                                          tag: _saleItemPromotionList[index]
+                                              .id!,
+                                          child: Image.network(
+                                              "http://192.168.0.157:8000" +
+                                                  _saleItemPromotionList[
+                                                          index]
+                                                      .url!)),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Text(
+                                      _saleItemPromotionList[index].itemName!,
+                                      style: TextStyle(
+                                          color: Colors.black),
+                                      maxLines: 2,
+                                    ),
+                                  ]),
+                                ),
+                              ),
+                            ]),
                           ),
-                        )
-                      ],
-                    ),
+                        ),
+                      ),
+                        )),
+                     ),
+
+                  
                   );
                 }
               })),

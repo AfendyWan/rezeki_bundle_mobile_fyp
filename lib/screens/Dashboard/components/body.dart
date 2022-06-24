@@ -28,8 +28,8 @@ class _BodyState extends State<Body> {
           
             DiscountBanner(),
             Categories(userdata: widget.userdata, token: widget.token),
-            SpecialOffers(),
-            SizedBox(height: getProportionateScreenWidth(30)),
+            // SpecialOffers(),
+            // SizedBox(height: getProportionateScreenWidth(30)),
             PopularProducts(key: widget.key, userdata: widget.userdata, token: widget.token),
             SizedBox(height: getProportionateScreenWidth(30)),
           ],

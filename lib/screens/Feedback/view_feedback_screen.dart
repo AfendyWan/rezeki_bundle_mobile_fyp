@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:rezeki_bundle_mobile/api/feedback_api.dart';
+import 'package:rezeki_bundle_mobile/components/appbar.dart';
+import 'package:rezeki_bundle_mobile/components/coustom_bottom_nav_bar.dart';
 import 'package:rezeki_bundle_mobile/components/home_header.dart';
 import 'package:rezeki_bundle_mobile/components/product_card.dart';
 import 'package:rezeki_bundle_mobile/components/size_config.dart';
 import 'package:rezeki_bundle_mobile/constants.dart';
+import 'package:rezeki_bundle_mobile/enums.dart';
 import 'package:rezeki_bundle_mobile/model/feedback.dart';
 import 'package:rezeki_bundle_mobile/model/user.dart';
 
@@ -47,104 +50,105 @@ class _ViewFeedbackScreenState extends State<ViewFeedbackScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: HomeHeader(
-        token: widget.token,
-        userdata: widget.userdata,
-      ),
+      appBar: appbar(title: "Feedback", context: context),
       body: FutureBuilder(
         future: getData(),
         builder: (context, projectSnap) {
           if (projectSnap.connectionState == ConnectionState.none) {
             return const CircularProgressIndicator();
           } else {
-            return ListView.builder(
-                itemCount: _feedbackList.length,
-                itemBuilder: (context, index) {
-                  return Column(
-                    children: <Widget>[
-                        Card(
-                          color: Color.fromARGB(221, 255, 212, 253),
-                          elevation: 2,
-                          shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            // ignore: prefer_const_literals_to_create_immutables
-                            children: <Widget>[
-                      
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(  _feedbackList[index].feedbackTitle!,
-                                 style: Theme.of(context).textTheme.bodyText1
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListView.builder(
+                  itemCount: _feedbackList.length,
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: <Widget>[
+                          Card(
+                            color: Color.fromARGB(221, 255, 212, 253),
+                            elevation: 2,
+                            shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              // ignore: prefer_const_literals_to_create_immutables
+                              children: <Widget>[
+                        
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(  _feedbackList[index].feedbackTitle!,
+                                   style: Theme.of(context).textTheme.bodyText1
+                                  ),
                                 ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(  _feedbackList[index].feedbackDescription!,
-                                 style: TextStyle(
-                                fontWeight: FontWeight.w400, color: kPrimaryColor),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(  _feedbackList[index].feedbackDescription!,
+                                   style: TextStyle(
+                                  fontWeight: FontWeight.w400, color: kPrimaryColor),
+                                  ),
                                 ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  children: <Widget>[
-                                    SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    child: Row(
-                                      children: [
-                                        ...List.generate(
-                                        _feedbackList[index].feedbackImages!.length,
-                                          (index1) {
-                                          return Padding(
-                                            padding: EdgeInsets.only(left: getProportionateScreenWidth(0), right:getProportionateScreenWidth(20), ),
-                                            child: SizedBox(
-                                              width: getProportionateScreenWidth(140),
-                                              child: GestureDetector(
-                                                onTap: () {},
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    AspectRatio(
-                                                      aspectRatio: 1.02,
-                                                      child: Container(
-                                                        padding: EdgeInsets.all(getProportionateScreenWidth(10)),
-                                                        decoration: BoxDecoration(
-                                                          color: Color(0xff9c89ff),
-                                                          borderRadius: BorderRadius.circular(15),
-                                                        ),
-                                                        child: Hero(
-                                                          tag: _feedbackList[index].feedbackImages![index].id!,
-                                                          child: Image.network("http://192.168.0.157:8000"+ _feedbackList[index].feedbackImages![index1].url!)
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    children: <Widget>[
+                                      SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Row(
+                                        children: [
+                                          ...List.generate(
+                                          _feedbackList[index].feedbackImages!.length,
+                                            (index1) {
+                                            return Padding(
+                                              padding: EdgeInsets.only(left: getProportionateScreenWidth(0), right:getProportionateScreenWidth(20), ),
+                                              child: SizedBox(
+                                                width: getProportionateScreenWidth(140),
+                                                child: GestureDetector(
+                                                  onTap: () {},
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      AspectRatio(
+                                                        aspectRatio: 1.02,
+                                                        child: Container(
+                                                          padding: EdgeInsets.all(getProportionateScreenWidth(10)),
+                                                          decoration: BoxDecoration(
+                                                            color: Color(0xff9c89ff),
+                                                            borderRadius: BorderRadius.circular(15),
+                                                          ),
+                                                          child: Hero(
+                                                            tag: _feedbackList[index].feedbackImages![index].id!,
+                                                            child: Image.network("http://192.168.0.157:8000"+ _feedbackList[index].feedbackImages![index1].url!)
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                  
-                                                  ],
+                                                    
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          );
-                                          },
+                                            );
+                                            },
+                                          ),
+                                       
+                                          ],
                                         ),
-                                     
-                                        ],
                                       ),
-                                    ),
-                                  ]
-                                ),
-                              )
-                            ],
+                                    ]
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                    ],
-                  );
-                });
+                      ],
+                    );
+                  }),
+            );
           }
         },
       ),
+      bottomNavigationBar: CustomBottomNavBar(selectedMenu: MenuState.message, token: widget.token, userdata: widget.userdata),
     );
   }
 }

@@ -82,6 +82,8 @@ class _PopularProductsState extends State<PopularProducts> {
                         _saleItemCategoryList.length,
                         (index) {
                           return ProductCard(
+                            token: widget.token!,
+                            userdata: widget.userdata!,
                             rightWidth: 0,
                             leftWidth: 20,
                               saleItemCategory: _saleItemCategoryList[index]); // here by default width and height is 0

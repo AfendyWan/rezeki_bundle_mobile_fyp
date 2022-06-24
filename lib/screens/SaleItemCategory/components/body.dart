@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rezeki_bundle_mobile/api/login_api.dart';
 import 'package:rezeki_bundle_mobile/api/sale_item_api.dart';
+import 'package:rezeki_bundle_mobile/components/appbar.dart';
 import 'package:rezeki_bundle_mobile/components/size_config.dart';
 import 'package:rezeki_bundle_mobile/constants.dart';
 import 'package:rezeki_bundle_mobile/model/category_sale_item.dart';
@@ -56,7 +57,7 @@ class _BodyState extends State<Body> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: HomeHeader(token: widget.token, userdata: widget.userdata,),
+      appBar: appbar(title: "Sale Item Category", context: context),
       body: Background(
           child: FutureBuilder(
               future: getData(),
@@ -69,75 +70,77 @@ class _BodyState extends State<Body> {
                   return SingleChildScrollView(
                     child: Column(
                       children: [
-                        SizedBox(height: getProportionateScreenHeight(20)),
+                        SizedBox(height: getProportionateScreenHeight(1)),
                         
-                        Align(
-                          alignment: AlignmentDirectional.bottomCenter, // <--
-                          child: GridView.count(
-                            physics: const ScrollPhysics(),
-                            crossAxisCount: 2,
-                            shrinkWrap: true,
-                            children: List.generate(
-                                _saleItemCategoryList.length, (index) {
-                              return Padding(
-                                padding: EdgeInsets.only(left: 15, right: 15),
-                                child: SizedBox(
-                                  width: getProportionateScreenWidth(140),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                         Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  SaleItemScreen(
-                                                    token: widget.token,
-                                                    userdata: widget.userdata,
-                                                    saleItemCategoryId: saleItemCategory[index].id,
-                                                    key: widget.key,
-                                                  )
-                                            )
-                                          );
-                                    },
-                                    child: Column(children: [
-                                      Card(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
-                                        ),
-                                        margin: EdgeInsets.all(10),
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                          ),
-                                          child: Column(children: [
-                                            AspectRatio(
-                                              aspectRatio: 1.02,
-                                              child: Hero(
-                                                  tag: saleItemCategory[index]
-                                                      .id,
-                                                  child: Image.network(
-                                                      "http://192.168.0.157:8000" +
-                                                          saleItemCategory[
-                                                                  index]
-                                                              .url!)),
-                                            ),
-                                            const SizedBox(height: 10),
-                                            Text(
-                                              saleItemCategory[index].name!,
-                                              style: TextStyle(
-                                                  color: Colors.black),
-                                              maxLines: 2,
-                                            ),
-                                          ]),
-                                        ),
+                        GridView.builder(
+                          physics: const ScrollPhysics(),
+                            gridDelegate:
+                  SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2),
+                          itemCount: _saleItemCategoryList.length ,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) => Card(
+                            child: GridTile(child:     Center(
+                              child: Padding(
+                              padding: EdgeInsets.only(left: 15, right: 15),
+                              child: SizedBox(
+                                width: getProportionateScreenWidth(140),
+                                child: GestureDetector(
+                                  onTap: () {
+                                       Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                SaleItemScreen(
+                                                  token: widget.token,
+                                                  userdata: widget.userdata,
+                                                  saleItemCategoryId: saleItemCategory[index].id,
+                                                  key: widget.key,
+                                                )
+                                          )
+                                        );
+                                  },
+                                  child: Column(children: [
+                                    Card(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
                                       ),
-                                    ]),
-                                  ),
+                                      margin: EdgeInsets.all(10),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                        ),
+                                        child: Column(children: [
+                                          AspectRatio(
+                                            aspectRatio: 1.02,
+                                            child: Hero(
+                                                tag: saleItemCategory[index]
+                                                    .id,
+                                                child: Image.network(
+                                                    "http://192.168.0.157:8000" +
+                                                        saleItemCategory[
+                                                                index]
+                                                            .url!)),
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Text(
+                                            saleItemCategory[index].name!,
+                                            style: TextStyle(
+                                                color: Colors.black),
+                                            maxLines: 2,
+                                          ),
+                                        ]),
+                                      ),
+                                    ),
+                                  ]),
                                 ),
-                              );
-                            }),
-                          ),
+                              ),
+                            ),
+                            ))
+                          )
+                       
                         )
                       ],
                     ),

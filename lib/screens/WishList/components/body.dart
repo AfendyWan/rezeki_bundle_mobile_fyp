@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:rezeki_bundle_mobile/api/sale_item_api.dart';
 import 'package:rezeki_bundle_mobile/api/wish_list_api.dart';
+import 'package:rezeki_bundle_mobile/components/appbar.dart';
+import 'package:rezeki_bundle_mobile/components/coustom_bottom_nav_bar.dart';
 import 'package:rezeki_bundle_mobile/components/size_config.dart';
+import 'package:rezeki_bundle_mobile/enums.dart';
 
 import 'package:rezeki_bundle_mobile/model/sale_item.dart';
 import 'package:rezeki_bundle_mobile/model/user.dart';
@@ -69,7 +72,6 @@ class _BodyState extends State<Body> {
             url: data.url));
       }
     }
-
   }
 
   @override
@@ -81,7 +83,8 @@ class _BodyState extends State<Body> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: HomeHeader(token: widget.token, userdata: widget.userdata,),
+      // appBar: HomeHeader(token: widget.token, userdata: widget.userdata,),
+      appBar: appbar(title: "Wish List", context: context),
       body: Background(
           child: FutureBuilder(
               future: getData(),
@@ -100,99 +103,88 @@ class _BodyState extends State<Body> {
                       ),
                     );
                   } else {
-                    return SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          Align(
-                            alignment: AlignmentDirectional.bottomCenter, // <--
-                            child: GridView.count(
-                              physics: const ScrollPhysics(),
-                              crossAxisCount: 2,
-                              shrinkWrap: true,
-                              children:
-                                  List.generate(_saleItemList.length, (index) {
-                                return Padding(
-                                  padding: EdgeInsets.only(left: 15, right: 15),
-                                  child: SizedBox(
-                                    width: getProportionateScreenWidth(140),
-                                    child: GestureDetector(
-                                      onLongPress: () async {
-                                        print("yea");
-                                        isWishList = await getItemIsWishList(
-                                            _saleItemList[index].itemID);
-
-                                        print(isWishList);
-                                        print("yea1");
-                                        print(_saleItemList[index].itemID,);
-                                            
-
-                                        var result;
-                                        result = await toggleWishList(
-                                            widget.token,
-                                            widget.userdata!.id,
-                                            _saleItemList[index].itemID,
-                                            isWishList);
-                                        setState(() {
-                                          
-                                        });
-                                        print(result);
-                                        print("yea2");
-                                      },
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  SaleItemDetailsScreen(
-                                                token: widget.token,
-                                                userdata: widget.userdata,
-                                                saleItem: _saleItemList[index],
-                                                key: widget.key,
+                    return GridView.builder(
+                      itemCount: _saleItemList.length,
+                      physics: const ScrollPhysics(),
+                     
+                      gridDelegate:
+                          SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2),
+                      itemBuilder: (context, index) => Card(
+                        child: GridTile(child:     Center(
+                          child: Padding(
+                                      padding: EdgeInsets.only(left: 15, right: 15),
+                                      child: SizedBox(
+                                        width: getProportionateScreenWidth(140),
+                                        child: GestureDetector(
+                                          onLongPress: () async {
+                                       
+                                            isWishList = await getItemIsWishList(
+                                                _saleItemList[index].itemID);
+                                            var result;
+                                            result = await toggleWishList(
+                                                widget.token,
+                                                widget.userdata!.id,
+                                                _saleItemList[index].itemID,
+                                                isWishList);
+                                            setState(() {
+                                              
+                                            });
+                                         
+                                          },
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      SaleItemDetailsScreen(
+                                                    token: widget.token,
+                                                    userdata: widget.userdata,
+                                                    saleItem: _saleItemList[index],
+                                                    key: widget.key,
+                                                  ),
+                                                )).then((value) => setState(() {}));
+                                          },
+                                          child: Column(children: [
+                                            Card(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10.0),
                                               ),
-                                            )).then((value) => setState(() {}));
-                                      },
-                                      child: Column(children: [
-                                        Card(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10.0),
-                                          ),
-                                          margin: EdgeInsets.all(10),
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
+                                              margin: EdgeInsets.all(10),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
+                                                ),
+                                                child: Column(children: [
+                                                  AspectRatio(
+                                                    aspectRatio: 1.02,
+                                                    child: Hero(
+                                                        tag: _saleItemList[index]
+                                                            .id!,
+                                                        child: Image.network(
+                                                            "http://192.168.0.157:8000" +
+                                                                _saleItemList[index]
+                                                                    .url!)),
+                                                  ),
+                                                  const SizedBox(height: 10),
+                                                  Text(
+                                                    _saleItemList[index].itemName!,
+                                                    style: TextStyle(
+                                                        color: Colors.black),
+                                                    maxLines: 2,
+                                                  ),
+                                                ]),
+                                              ),
                                             ),
-                                            child: Column(children: [
-                                              AspectRatio(
-                                                aspectRatio: 1.02,
-                                                child: Hero(
-                                                    tag: _saleItemList[index]
-                                                        .id!,
-                                                    child: Image.network(
-                                                        "http://192.168.0.157:8000" +
-                                                            _saleItemList[index]
-                                                                .url!)),
-                                              ),
-                                              const SizedBox(height: 10),
-                                              Text(
-                                                _saleItemList[index].itemName!,
-                                                style: TextStyle(
-                                                    color: Colors.black),
-                                                maxLines: 2,
-                                              ),
-                                            ]),
-                                          ),
+                                          ]),
                                         ),
-                                      ]),
+                                      ),
                                     ),
-                                  ),
-                                );
-                              }),
-                            ),
-                          )
-                        ],
-                      ),
+                        ),),
+                        
+                      )
                     );
                   }
                   return Padding(
@@ -210,6 +202,11 @@ class _BodyState extends State<Body> {
                   return SizedBox();
                 }
               })),
+      bottomNavigationBar: CustomBottomNavBar(
+        selectedMenu: MenuState.favourite,
+        token: widget.token,
+        userdata: widget.userdata,
+      ),
     );
   }
 }
