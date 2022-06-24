@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:rezeki_bundle_mobile/api/login_api.dart';
 import 'package:rezeki_bundle_mobile/components/size_config.dart';
+import 'package:rezeki_bundle_mobile/constants.dart';
 import 'package:rezeki_bundle_mobile/model/user.dart';
 import 'package:rezeki_bundle_mobile/screens/Cart/cart_screen.dart';
+import 'package:rezeki_bundle_mobile/screens/Login/login_screen.dart';
 
 import '../screens/Dashboard/components/icon_btn_with_counter.dart';
 import '../screens/Dashboard/components/search_field.dart';
@@ -51,11 +54,27 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
                               )
                             );                     
                     }),
-                IconBtnWithCounter(
-                  svgSrc: "assets/icons/Bell.svg",
-                  numOfitem: 3,
-                  press: () {},
-                ),
+                  Container(
+             
+              decoration: BoxDecoration(
+                color: kSecondaryColor.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+                    child: IconButton(
+                    icon: Icon(Icons.exit_to_app),
+                    onPressed: () async {
+                      await logout(token, userdata!.email, userdata!.password, userdata!.id);
+                Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => LoginScreen()));
+                    }
+                    //  Navigator.pushNamed(context, HomeScreen.routeName),
+                    ),
+                  ),
+                // IconBtnWithCounter(
+                //   svgSrc: "assets/icons/Bell.svg",
+                //   numOfitem: 3,
+                //   press: () {},
+                // ),
               ],
             ),
           ],

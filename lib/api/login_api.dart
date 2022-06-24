@@ -5,6 +5,8 @@ import 'package:rezeki_bundle_mobile/model/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rezeki_bundle_mobile/api/APIRoute.dart';
 
+import 'dart:io';
+
 import 'package:rezeki_bundle_mobile/main.dart';
 
 import '../screens/Dashboard/dashboard.dart';
@@ -49,6 +51,46 @@ loginAcc(context, email, password) async {
           );
         });
   }
+}
+
+logout(token, email, password, userID) async {
+ 
+
+  Map<String, String> headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    
+  };
+
+  final queryParameters = {
+   
+   'userID': userID.toString(),   
+  
+  };
+
+    Map<String, String> header = {
+    HttpHeaders.authorizationHeader: "Bearer $token",
+    HttpHeaders.contentTypeHeader: "application/json"
+  };
+
+   var url = "http://192.168.0.157:8000/api/auth/logout";
+
+  Uri uri = Uri.parse(url);
+  final finalUri = uri.replace(queryParameters: queryParameters); //USE THIS
+  print(finalUri);
+
+  final response = await http.post(
+    finalUri,
+    headers: header,
+  );
+
+  var respStr = await response.body;
+  var jsonResponse = jsonDecode(respStr);
+
+  print(jsonResponse);
+  if (response.statusCode == 200) {
+    return "success";
+  } else {}
 }
 
 storeFCMToken(id, fcmToken) async {

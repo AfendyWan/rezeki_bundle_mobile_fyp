@@ -6,19 +6,19 @@ import 'package:rezeki_bundle_mobile/model/user.dart';
 import 'components/body.dart';
 
 
-class OrderScreen extends StatefulWidget {
+class ShipmentListScreen extends StatefulWidget {
   final User? userdata;
   final String? token;
-  const OrderScreen({Key? key, required this.userdata, required this.token})
+  const ShipmentListScreen({Key? key, required this.userdata, required this.token})
       : super(
           key: key,
         );
 
   @override
-  State<OrderScreen> createState() => _OrderScreenState();
+  State<ShipmentListScreen> createState() => _ShipmentListScreenState();
 }
 
-class _OrderScreenState extends State<OrderScreen> {
+class _ShipmentListScreenState extends State<ShipmentListScreen> {
   Cart? cartItem;
 
 
@@ -57,7 +57,7 @@ class _OrderScreenState extends State<OrderScreen> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            "Order History",
+            "Shipment",
             style: TextStyle(color: Colors.black),
           ),
    

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rezeki_bundle_mobile/api/register_api.dart';
 import 'package:rezeki_bundle_mobile/api/setting_api.dart';
+import 'package:rezeki_bundle_mobile/api/shipping_api.dart';
 import 'package:rezeki_bundle_mobile/api/user_api.dart';
 import 'package:rezeki_bundle_mobile/components/rounded_button.dart';
 import 'package:rezeki_bundle_mobile/components/text_field_container.dart';
@@ -10,6 +11,8 @@ import 'package:rezeki_bundle_mobile/model/city.dart';
 import 'package:rezeki_bundle_mobile/model/state.dart';
 import 'package:rezeki_bundle_mobile/model/user.dart';
 import 'package:rezeki_bundle_mobile/model/user_shipping_address.dart';
+import 'package:rezeki_bundle_mobile/screens/Checkout/checkout_screen.dart';
+import 'package:rezeki_bundle_mobile/screens/Dashboard/dashboard.dart';
 import 'package:rezeki_bundle_mobile/screens/Profile/components/change_password.dart';
 import 'package:rezeki_bundle_mobile/screens/Signup/components/background.dart';
 
@@ -35,12 +38,6 @@ class ShipmentForm extends StatefulWidget {
 
 class _ShipmentFormState extends State<ShipmentForm> {
   bool _passwordVisible = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _passwordVisible = true;
-  }
 
   final AsyncMemoizer _memoizer = AsyncMemoizer();
 
@@ -98,19 +95,30 @@ class _ShipmentFormState extends State<ShipmentForm> {
     return check;
   }
 
+  var fullNameTextController = TextEditingController();
+  var phoneNumberTextController = TextEditingController();
+  var shippingAddressTextController = TextEditingController();
+  var postCodeTextController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.isEdit == true) {
+       fullNameTextController = TextEditingController(
+          text: widget.userShippingAddress!.full_name);
+      phoneNumberTextController = TextEditingController(
+          text: widget.userShippingAddress!.phone_number);
+      shippingAddressTextController = TextEditingController(
+          text: widget.userShippingAddress!.shipping_address);
+      postCodeTextController = TextEditingController(
+          text: widget.userShippingAddress!.postcode.toString());
+    }
+  }
+
   int val = -1;
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-
-    var shippingAddressTextController = TextEditingController();
-    var postCodeTextController = TextEditingController();
-
-    if(widget.isEdit == true){
-       shippingAddressTextController = TextEditingController(text: widget.userShippingAddress!.shipping_address);
-       postCodeTextController = TextEditingController(text: widget.userShippingAddress!.postcode.toString());
-    }
-
     Size size = MediaQuery.of(context).size;
     String? selectedValue;
     var items = ['Yes', 'No'];
@@ -130,6 +138,46 @@ class _ShipmentFormState extends State<ShipmentForm> {
                         key: _formKey,
                         child: Column(
                           children: [
+                           TextFieldContainer(
+                              child: TextFormField(                                 
+                                  controller: fullNameTextController,
+                                  onChanged: (value) {},
+                                  cursorColor: kPrimaryColor,
+                                  decoration: const InputDecoration(
+                                    icon: Icon(
+                                      Icons.person,
+                                      color: kPrimaryColor,
+                                    ),
+                                    hintText: "Your Full Name",
+                                    border: InputBorder.none,
+                                  ),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return "Please enter your shipping address";
+                                    }
+                                    return null;
+                                  }),
+                            ),
+                          TextFieldContainer(
+                              child: TextFormField(
+                                  controller: phoneNumberTextController,
+                                  onChanged: (value) {},
+                                  cursorColor: kPrimaryColor,
+                                  decoration: const InputDecoration(
+                                    icon: Icon(
+                                      Icons.phone,
+                                      color: kPrimaryColor,
+                                    ),
+                                    hintText: "Your Phone Number",
+                                    border: InputBorder.none,
+                                  ),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return "Please enter your phone number";
+                                    }
+                                    return null;
+                                  }),
+                            ),
                             TextFieldContainer(
                               child: TextFormField(
                                   maxLines: 6,
@@ -316,7 +364,39 @@ class _ShipmentFormState extends State<ShipmentForm> {
                                 print(getCity);
                                 if (_formKey.currentState != null) {
                                   if (_formKey.currentState!.validate()) {
-                                    var result = "";
+                                    print(shippingAddressTextController.text);
+                                    var convertStatusToInt;
+                                    if (getStatus == "Yes") {
+                                      convertStatusToInt = 1;
+                                    } else {
+                                      convertStatusToInt = 0;
+                                    }
+                                    var result;
+                                    if (widget.isEdit == true) {
+                                      result = await updateUserShipping(
+                                          widget.token,
+                                          fullNameTextController.text,
+                                          phoneNumberTextController.text,
+                                          widget.userShippingAddress!.id,
+                                          widget.userdata!.id,
+                                          shippingAddressTextController.text,
+                                          getState,
+                                          getCity,
+                                          postCodeTextController.text,
+                                          convertStatusToInt);
+                                    } else {
+                                       result = await addUserShippingAddress(
+                                          widget.token,
+                                          fullNameTextController.text,
+                                          phoneNumberTextController.text,
+                                          widget.userdata!.id,
+                                          shippingAddressTextController.text,
+                                          getState,
+                                          getCity,
+                                          postCodeTextController.text,
+                                          convertStatusToInt);
+                                    }
+
                                     if (result == "success") {
                                       setState(() {});
                                       showDialog(
@@ -324,11 +404,27 @@ class _ShipmentFormState extends State<ShipmentForm> {
                                           builder: (BuildContext context) {
                                             return AlertDialog(
                                               title: const Text(
-                                                  "User profile saved successfully"),
+                                                  "Shipment updated successfully"),
                                               actions: [
                                                 TextButton(
-                                                    onPressed: () =>
-                                                        Navigator.pop(context),
+                                                    onPressed: () {
+                                                      Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
+                                                                        DashboardScreen(
+                                                                  token: widget
+                                                                      .token,
+                                                                  userdata: widget
+                                                                      .userdata,
+                                                                  key: widget
+                                                                      .key,
+                                                                ),
+                                                              ))
+                                                          .then((value) =>
+                                                              setState(() {}));
+                                                    },
                                                     child: const Text("OK"))
                                               ],
                                             );
@@ -369,7 +465,7 @@ class _ShipmentFormState extends State<ShipmentForm> {
                         ),
                       );
                     } else {
-                      return const CircularProgressIndicator();
+                      return Center(child: const CircularProgressIndicator());
                     }
                   }),
             ],
@@ -428,15 +524,15 @@ AppBar buildAppBar(BuildContext context, bool isEdit) {
       crossAxisAlignment: CrossAxisAlignment.center,
       // ignore: prefer_const_literals_to_create_immutables
       children: [
-        isEdit == true?
-        const Text(
-          "Edit Shipping Address",
-          style: TextStyle(color: Colors.black),
-        ):
-        const Text(
-          "Add New Shipping Address",
-          style: TextStyle(color: Colors.black),
-        )
+        isEdit == true
+            ? const Text(
+                "Edit Shipping Address",
+                style: TextStyle(color: Colors.black),
+              )
+            : const Text(
+                "Add New Shipping Address",
+                style: TextStyle(color: Colors.black),
+              )
       ],
     ),
   );

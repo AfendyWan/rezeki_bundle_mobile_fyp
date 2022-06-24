@@ -12,8 +12,8 @@ class CheckoutCard extends StatefulWidget {
    final User? userdata;
 
   final String? token;
-        final Cart? cartdata;
-  const CheckoutCard({Key? key, required this.userdata, required this.token,  required this.cartdata})
+        final String? totalPrice;
+  const CheckoutCard({Key? key, required this.userdata, required this.token,  required this.totalPrice})
       : super(
           key: key,
         );
@@ -81,13 +81,13 @@ class _CheckoutCardState extends State<CheckoutCard> {
                   TextSpan(
                     text: "Total:\n",
                     children: [
-                       widget.cartdata.toString() == "null"?
+                       widget.totalPrice == "null"?
                       TextSpan(
                         text: "RM 0.00",
                         style: TextStyle(fontSize: 16, color: Colors.black),
                       ):
                       TextSpan(
-                        text: "RM " +  widget.cartdata!.totalPrice.toString(),
+                        text: "RM " +  widget.totalPrice.toString(),
                         style: TextStyle(fontSize: 16, color: Colors.black),
                       )
                     ],

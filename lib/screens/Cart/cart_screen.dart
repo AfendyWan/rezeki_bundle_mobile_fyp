@@ -51,12 +51,14 @@ class _CartScreenState extends State<CartScreen> {
                 token: widget.token,
                 userdata: widget.userdata,
                 isCartEmpty: 1,
+             
               ):
 
                  Body(
                 token: widget.token,
                 userdata: widget.userdata,
                 isCartEmpty: 0,
+               
               ),
             );
           } else {
@@ -85,18 +87,7 @@ class _CartScreenState extends State<CartScreen> {
             "Your Cart",
             style: TextStyle(color: Colors.black),
           ),
-          SizedBox(
-            height: 5,
-          ),
-          checkFutureBuilder == 1 &&  cartItem!.cartItemQuantity.toString() != "null" ?
-          Text(
-              cartItem!.cartItemQuantity.toString() + " items",
-            style: Theme.of(context).textTheme.caption,
-          ):
-           Text(
-            "",
-            style: Theme.of(context).textTheme.caption,
-          )
+      
         ],
       ),
     );

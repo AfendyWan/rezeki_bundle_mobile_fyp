@@ -63,6 +63,7 @@ getProfilePhoto(
 }
 
 updateUserData(
+  token,
   context,
   userID,
   firstName,
@@ -74,24 +75,39 @@ updateUserData(
 ) async {
   var url = "http://192.168.0.157:8000/api/auth/updateUserData";
 
-  Map<String, String> headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
+
+  final queryParameters = {
+    'userID': userID.toString(),
+    'first_name': firstName,
+    'last_name': lastName,
+    'email': email.toString(),
+    'gender': postCode,
+    'phone_number': phoneNumber,
+    'postcode': postCode,
   };
 
-  var request = http.MultipartRequest('POST', Uri.parse(url));
-  request.headers.addAll(headers);
-  request.fields['userID'] = userID.toString();
-  request.fields['first_name'] = firstName.toString();
-  request.fields['last_name'] = lastName.toString();
-  request.fields['email'] = email.toString();
-  request.fields['gender'] = gender.toString();
-  request.fields['postcode'] = postCode;
-  request.fields['phone_number'] = phoneNumber.toString();
+  Map<String, String> header = {
+    HttpHeaders.authorizationHeader: "Token $token",
+    HttpHeaders.contentTypeHeader: "application/json"
+  };
 
-  var response = await request.send();
-  var respStr = await http.Response.fromStream(response);
-  var jsonResponse = jsonDecode(respStr.body);
+
+
+  Uri uri = Uri.parse(url);
+  final finalUri = uri.replace(queryParameters: queryParameters); //USE THIS
+
+  print(finalUri);
+  final response = await http.post(
+    finalUri,
+    headers: header,
+  );
+
+
+
+  var respStr = await response.body;
+  var jsonResponse = jsonDecode(respStr);
+
+
   print(jsonResponse);
   if (response.statusCode == 200) {
     var success = "success";
@@ -119,7 +135,7 @@ changeUserPassword(context, userID, newPassord, oldPassword) async {
     "Content-Type": "application/json",
     "Accept": "application/json",
   };
- print(oldPassword);
+  print(oldPassword);
   var request = http.MultipartRequest('POST', Uri.parse(url));
   request.headers.addAll(headers);
   request.fields['userID'] = userID.toString();

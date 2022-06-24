@@ -6,6 +6,8 @@ class UserShippingAddress {
   int? postcode;
   int? shipping_default_status;
   int? userID;
+  String? full_name;
+  String? phone_number;
 
   UserShippingAddress({
     this.id,
@@ -15,6 +17,8 @@ class UserShippingAddress {
     this.postcode,
     this.shipping_default_status,
     this.userID,
+     this.full_name,
+    this.phone_number,
   });
 
   factory UserShippingAddress.fromJson(Map<String, dynamic> json) {
@@ -26,6 +30,8 @@ class UserShippingAddress {
       postcode: json['postcode'],
       shipping_default_status: json['shipping_default_status'],
       userID: json['userID'],
+       full_name: json['full_name'],
+      phone_number: json['phone_number'],
     );
   }
 }

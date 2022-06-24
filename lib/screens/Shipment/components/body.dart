@@ -63,7 +63,9 @@ class _BodyState extends State<Body> {
           shipping_address: data.shipping_address,
           shipping_default_status: data.shipping_default_status,
           state: data.state,
-          userID: data.userID));
+          userID: data.userID,
+          full_name: data.full_name,
+          phone_number: data.phone_number));
       for (final mapEntry in _statesMap.entries) {
        
         final key = mapEntry.key;
@@ -102,10 +104,12 @@ class _BodyState extends State<Body> {
                           key: Key(_userShippingList[index].id.toString()),
                           direction: DismissDirection.endToStart,
                           onDismissed: (direction) async {
-                            // await deleteCartItem(
-                            //     widget.token,
-                            //     _userShippingList[index].cart_id,
-                            //     _userShippingList[index].sale_item_id);
+                            await deleteUserShippingAddress(
+                                widget.token,
+                                widget.userdata!.id,
+                                _userShippingList[index].id,
+
+                                _userShippingList[index].shipping_default_status);
                             setState(() {});
                           },
                           background: Container(
@@ -139,19 +143,27 @@ class _BodyState extends State<Body> {
                               elevation: 0,
                               color:   _userShippingList[index].shipping_default_status.toString() == "1" ? Color.fromARGB(255, 113, 255, 153):Colors.transparent,                           child: Column(
                                 children: [
+                                    // Align(alignment: Alignment.centerLeft,
+                                    //   child: Text(
+                                    //       _userShippingList[index].full_name.toString() 
+                                    //        ),
+                                    // ),
                                   ListTile(
                                     dense: false,
                                     leading: Icon(Icons.place),
                                     title: Text('Delivery Addresses:'),
                                     subtitle: Text(
+                                      _userShippingList[index].full_name.toString() + "\n" +
+                                      
                                         _userShippingList[index].shipping_address.toString() +
                                             ", " +
                                             _userShippingList[index].postcode.toString() +
                                             ", " +
                                             _userShippingList[index].city.toString() +
-                                            ", " + _userStateList[index]),
+                                            ", " + _userStateList[index]  + "\n" + _userShippingList[index].phone_number.toString() ),
                                     trailing: Icon(Icons.arrow_forward_ios_rounded),
                                   ),
+                                 
                                  
                                 ],
                               ),

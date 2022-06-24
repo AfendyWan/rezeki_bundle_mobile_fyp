@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:rezeki_bundle_mobile/api/cart_api.dart';
 import 'package:rezeki_bundle_mobile/model/cart.dart';
+import 'package:rezeki_bundle_mobile/model/order.dart';
 import 'package:rezeki_bundle_mobile/model/user.dart';
+import 'package:rezeki_bundle_mobile/screens/OrderItem/components/body.dart';
 
-import 'components/body.dart';
 
 
-class OrderScreen extends StatefulWidget {
+class OrderItemsScreen extends StatefulWidget {
   final User? userdata;
   final String? token;
-  const OrderScreen({Key? key, required this.userdata, required this.token})
+  final Order? order;
+  const OrderItemsScreen({Key? key, required this.userdata, required this.token, required this.order})
       : super(
           key: key,
         );
 
   @override
-  State<OrderScreen> createState() => _OrderScreenState();
+  State<OrderItemsScreen> createState() => _OrderItemsScreenState();
 }
 
-class _OrderScreenState extends State<OrderScreen> {
-  Cart? cartItem;
-
+class _OrderItemsScreenState extends State<OrderItemsScreen> {
 
 
   @override
@@ -33,17 +33,18 @@ class _OrderScreenState extends State<OrderScreen> {
   Widget build(BuildContext context) {
  
     return Scaffold(
-              appBar: buildAppBar(context, 1),
+              appBar: buildAppBar(context),
               body: 
-              Body(
-                token: widget.token,
-                userdata: widget.userdata,)
-           
-              
+                  Body(
+                      token: widget.token,
+                      userdata: widget.userdata,
+                    order: widget.order,
+                    )
+         
             );
   }
 
-  AppBar buildAppBar(BuildContext context, int checkFutureBuilder) {
+  AppBar buildAppBar(BuildContext context) {
     return AppBar(
       leading: IconButton(
         icon: Icon(Icons.arrow_back_ios_new_rounded, color: Colors.black),
@@ -57,13 +58,12 @@ class _OrderScreenState extends State<OrderScreen> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            "Order History",
+            "Order Items",
             style: TextStyle(color: Colors.black),
           ),
-   
+
         ],
       ),
     );
   }
-  
 }

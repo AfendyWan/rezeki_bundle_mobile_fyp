@@ -1,27 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:rezeki_bundle_mobile/api/cart_api.dart';
+
 import 'package:rezeki_bundle_mobile/api/order_api.dart';
-import 'package:rezeki_bundle_mobile/components/home_header.dart';
+
 import 'package:rezeki_bundle_mobile/components/size_config.dart';
+
 import 'package:rezeki_bundle_mobile/model/cart_item.dart';
 import 'package:rezeki_bundle_mobile/model/order.dart';
-import 'package:rezeki_bundle_mobile/model/user.dart';
-import 'package:rezeki_bundle_mobile/screens/Cart/components/check_out_card.dart';
+import 'package:rezeki_bundle_mobile/model/order_item.dart';
 
-import 'order_cart.dart';
+import 'package:rezeki_bundle_mobile/model/user.dart';
+
+import 'order_item_card.dart';
 import 'package:async/async.dart';
 
 class Body extends StatefulWidget {
   final User? userdata;
   final String? token;
 
-  const Body(
-      {Key? key,
-      required this.userdata,
-      required this.token,
-      })
-      : super(
+  final Order? order;
+
+  const Body({
+    Key? key,
+    required this.userdata,
+    required this.token,
+    required this.order,
+  }) : super(
           key: key,
         );
   @override
@@ -32,31 +35,38 @@ class _BodyState extends State<Body> {
   final AsyncMemoizer _memoizer = AsyncMemoizer();
 
   var orderItem;
-  List<Order> _orderItemList = [];
+  var states;
+  List<OrderItem> _orderitemList = [];
+
+  var userStates;
   getData() async {
-     _orderItemList.clear();
-     orderItem = await getUserOrderTransaction(widget.token, widget.userdata!.id);
-    
+    _orderitemList.clear();
+
+    orderItem = await viewUserOrderItems(widget.token, widget.order!.id);
+    print("object");
+    print(orderItem);
     for (var data in orderItem) {
       //transfer states list from GET method call to a new one
-      _orderItemList.add(Order(
+      _orderitemList.add(OrderItem(
           id: data.id,
-        orderDate:  data.orderDate,
-        orderStatus: data.orderStatus,
-        order_number: data.order_number,
-        payment: data.payment,
-        paymentID: data.paymentID,
-        shipmentID: data.shipmentID,
-        userID: data.userID,));
+          orderPrice: data.orderPrice,
+          order_id: data.order_id,
+          quantity: data.quantity,
+          sale_item_id: data.sale_item_id,
+          itemName: data.itemName,
+          imageUrl: data.imageUrl));
     }
+  }
 
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-   
     return Scaffold(
-      body:  Padding(
+      body: Padding(
         padding:
             EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
         child: FutureBuilder(
@@ -66,15 +76,22 @@ class _BodyState extends State<Body> {
               print('project snapshot data is: ${projectSnap.data}');
               return const SizedBox();
             } else if (projectSnap.connectionState == ConnectionState.done) {
-              return ListView.builder(
-                itemCount: _orderItemList.length,
-                itemBuilder: (context, index) => Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  child: OrderCard(
-                    token: widget.token,
-                    userdata: widget.userdata,
-                    order:  _orderItemList[index],)
-                ),
+              return Column(
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      height: 200.0,
+                      child: ListView.builder(
+                        itemCount: _orderitemList.length,
+                        itemBuilder: (context, index) => Padding(
+                          padding: EdgeInsets.symmetric(vertical: 10),
+                          child:
+                              OrderItemCard(orderItem: _orderitemList[index]),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               );
             } else {
               return const SizedBox();
@@ -82,14 +99,7 @@ class _BodyState extends State<Body> {
           },
         ),
         // child:
-      )
-      // :
-      // Center(child: Text(
-      //   "Cart is Empty",
-      //   style: TextStyle(fontSize: 24),
-      //    textAlign: TextAlign.center,
-      // )),
-
+      ),
     );
   }
 }

@@ -52,12 +52,16 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 token: widget.token,
                 userdata: widget.userdata,
                 isCartEmpty: 1,
+                cart: cartItem,
+                totalPrice: double.parse(cartItem!.totalPrice!),
               ):
 
-                 Body(
+               Body(
                 token: widget.token,
                 userdata: widget.userdata,
                 isCartEmpty: 0,
+                cart: cartItem,
+                   totalPrice: double.parse(cartItem!.totalPrice!),
               ),
             );
           } else {

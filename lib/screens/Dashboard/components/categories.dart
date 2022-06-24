@@ -5,6 +5,7 @@ import 'package:rezeki_bundle_mobile/model/user.dart';
 import 'package:rezeki_bundle_mobile/screens/Feedback/view_feedback_screen.dart';
 import 'package:rezeki_bundle_mobile/screens/Order/order_screen.dart';
 import 'package:rezeki_bundle_mobile/screens/PromotionSaleItem/promotion_sale_item_screen.dart';
+import 'package:rezeki_bundle_mobile/screens/ShipmentList/shipment_list_screen.dart';
 import 'package:rezeki_bundle_mobile/screens/WishList/wish_list_screen.dart';
 
 class Categories extends StatefulWidget {
@@ -79,6 +80,18 @@ class _CategoriesState extends State<Categories> {
                     MaterialPageRoute(
                       builder: (context) =>
                           OrderScreen(
+                            token: widget.token,
+                            userdata: widget.userdata,
+                            key: widget.key,
+                          )
+                    )
+                  );
+              }else if(categories[index]["text"] == "Ship"){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          ShipmentListScreen(
                             token: widget.token,
                             userdata: widget.userdata,
                             key: widget.key,
