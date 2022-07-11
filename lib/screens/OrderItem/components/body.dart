@@ -43,8 +43,7 @@ class _BodyState extends State<Body> {
     _orderitemList.clear();
 
     orderItem = await viewUserOrderItems(widget.token, widget.order!.id);
-    print("object");
-    print(orderItem);
+  
     for (var data in orderItem) {
       //transfer states list from GET method call to a new one
       _orderitemList.add(OrderItem(
@@ -86,7 +85,7 @@ class _BodyState extends State<Body> {
                         itemBuilder: (context, index) => Padding(
                           padding: EdgeInsets.symmetric(vertical: 10),
                           child:
-                              OrderItemCard(orderItem: _orderitemList[index], token: widget.token, userdata: widget.userdata,),
+                              OrderItemCard(orderItem: _orderitemList[index], token: widget.token, userdata: widget.userdata, order: widget.order,),
                         ),
                       ),
                     ),

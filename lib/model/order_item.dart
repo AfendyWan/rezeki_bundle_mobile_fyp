@@ -5,7 +5,7 @@ class OrderItem {
   int? quantity;
   String? orderPrice;
   int? order_id;
-
+  int? feedback_status;
   String? itemName;
    String? imageUrl;
      int? sale_item_id;
@@ -17,7 +17,7 @@ class OrderItem {
     this.itemName,
     this.imageUrl,
     this.sale_item_id,
-   
+   this.feedback_status,
   });
 
   factory OrderItem.fromJson(Map<String, dynamic> json) {
@@ -30,6 +30,7 @@ class OrderItem {
         itemName: json['itemName'],
         imageUrl: json['url'],
         sale_item_id: json['sale_item_id'],
+        feedback_status: json['feedback_status'],
       );
   }
 }

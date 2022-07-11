@@ -8,6 +8,7 @@ import 'package:rezeki_bundle_mobile/components/size_config.dart';
 import 'package:rezeki_bundle_mobile/components/text_field_container.dart';
 import 'package:rezeki_bundle_mobile/constants.dart';
 import 'package:rezeki_bundle_mobile/model/cart_item.dart';
+import 'package:rezeki_bundle_mobile/model/order.dart';
 import 'package:rezeki_bundle_mobile/model/order_item.dart';
 import 'package:rezeki_bundle_mobile/model/user.dart';
 import 'package:rezeki_bundle_mobile/screens/Dashboard/dashboard.dart';
@@ -18,10 +19,12 @@ class OrderItemCard extends StatefulWidget {
     required this.token,
     required this.orderItem,
       required this.userdata,
+      required this.order,
   }) : super(key: key);
  final User? userdata;
   final OrderItem orderItem;
   final String? token;
+    final Order? order;
   @override
   State<OrderItemCard> createState() => _OrderItemCardState();
 }
@@ -96,7 +99,7 @@ class _OrderItemCardState extends State<OrderItemCard> {
                 ],
               ),
             ),
-            TextButton(
+            widget.order!.orderStatus == "Order Delivered" || widget.orderItem.feedback_status == 0? TextButton(
               style: TextButton.styleFrom(
               shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(11)),
@@ -213,8 +216,7 @@ class _OrderItemCardState extends State<OrderItemCard> {
                                                           feedbackTitleController.text, feedbackDescriptionController.text,
                                                           widget.userdata!.id, widget.orderItem.sale_item_id, listFile,
                                                           );
-                                                          print("a");
-                                                          print(result);
+                                                         
                                                           if (result == "success"){
                                                                  final snackBar = SnackBar(
                                                         content: const Text(
@@ -261,14 +263,14 @@ class _OrderItemCardState extends State<OrderItemCard> {
                           },
                         );   
               },
-              child: Text(
+              child:  Text(
                 "Submit Feedback",
                 style: TextStyle(
                   fontSize: 12,
                   color: Colors.white,
                 ),
-              ),
-            ),
+              )
+            ):SizedBox()
           ],
         )
       ],

@@ -76,6 +76,7 @@ class OrderCard extends StatelessWidget {
                 ),
               ),
             ),
+  
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 4.0, 0, 4.0),
               child: Text.rich(
@@ -86,6 +87,36 @@ class OrderCard extends StatelessWidget {
                   children: [
                     TextSpan(
                         text: order.payment![0].totalPrice.toString(),
+                        style: Theme.of(context).textTheme.bodyText1),
+                  ],
+                ),
+              ),
+            ),
+                        Padding(
+              padding: const EdgeInsets.fromLTRB(0, 4.0, 0, 4.0),
+              child: Text.rich(
+                TextSpan(
+                  text: "Payment Status: ",
+                  style: TextStyle(
+                      fontWeight: FontWeight.w600, color: kPrimaryColor),
+                  children: [
+                    TextSpan(
+                        text: order.payment![0].paymentStatus,
+                        style: Theme.of(context).textTheme.bodyText1),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 4.0, 0, 4.0),
+              child: Text.rich(
+                TextSpan(
+                  text: "Payment Remark: ",
+                  style: TextStyle(
+                      fontWeight: FontWeight.w600, color: kPrimaryColor),
+                  children: [
+                    TextSpan(
+                        text: order.payment![0].remark,
                         style: Theme.of(context).textTheme.bodyText1),
                   ],
                 ),
@@ -106,6 +137,7 @@ class OrderCard extends StatelessWidget {
                 ),
               ),
             ),
+            
             Row(
               children: [
                 Expanded(

@@ -100,9 +100,8 @@ class _CheckoutCardState extends State<CheckoutCard> {
                   child: DefaultButton(
                     text: "Check Out",
                     press: () {
-                                     Navigator.push(
-                         
-                              context,
+                     Navigator.push(
+                           context,
                               MaterialPageRoute(
                                 builder: (context) =>
                                 CheckoutScreen(
