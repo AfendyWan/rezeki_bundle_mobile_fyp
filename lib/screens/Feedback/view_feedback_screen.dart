@@ -9,6 +9,7 @@ import 'package:rezeki_bundle_mobile/components/size_config.dart';
 import 'package:rezeki_bundle_mobile/constants.dart';
 import 'package:rezeki_bundle_mobile/enums.dart';
 import 'package:rezeki_bundle_mobile/model/feedback.dart';
+import 'package:rezeki_bundle_mobile/model/feedback_image.dart';
 import 'package:rezeki_bundle_mobile/model/user.dart';
 
 class ViewFeedbackScreen extends StatefulWidget {
@@ -47,6 +48,29 @@ class _ViewFeedbackScreenState extends State<ViewFeedbackScreen> {
     }
   }
 
+var feedbackImageItem;
+  List<FeedbackImage> _feedbackImageList = [];
+    getFeedbackImages() async {
+    _feedbackImageList.clear();
+
+    feedbackImageItem = await getUserFeedbackImages(widget.token);
+
+ print("Get images");
+    print(feedbackImageItem);
+    
+ print("Get images22");
+    for (var data in feedbackImageItem) {
+     
+      _feedbackImageList.add(FeedbackImage(
+        feedback_id:  data.feedback_id,
+        id: data.id,
+        url: data.url,
+      ));
+    }
+     print("Get images1");
+    print(_feedbackImageList);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,7 +81,8 @@ class _ViewFeedbackScreenState extends State<ViewFeedbackScreen> {
           if (projectSnap.connectionState == ConnectionState.none) {
             return const CircularProgressIndicator();
           } else {
-            return Padding(
+            if (_feedbackList.isNotEmpty) {
+              return Padding(
               padding: const EdgeInsets.all(8.0),
               child: ListView.builder(
                   itemCount: _feedbackList.length,
@@ -109,20 +134,32 @@ class _ViewFeedbackScreenState extends State<ViewFeedbackScreen> {
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
-                                                      AspectRatio(
-                                                        aspectRatio: 1.02,
-                                                        child: Container(
-                                                          padding: EdgeInsets.all(getProportionateScreenWidth(10)),
-                                                          decoration: BoxDecoration(
-                                                            color: Color(0xff9c89ff),
-                                                            borderRadius: BorderRadius.circular(15),
-                                                          ),
-                                                          child: Hero(
-                                                            tag: _feedbackList[index].feedbackImages![index].id!,
-                                                            child: Image.network("http://192.168.0.157:8000"+ _feedbackList[index].feedbackImages![index1].url!)
-                                                          ),
-                                                        ),
-                                                      ),
+                                                      FutureBuilder(
+                                                        future: getFeedbackImages() ,
+                                                        builder: (context, projectSnap) {
+                                                        if (projectSnap.connectionState == ConnectionState.none) {
+                                                          return const CircularProgressIndicator();
+                                                        } else {
+                                                          if (_feedbackImageList.isNotEmpty) {
+                                                            return   AspectRatio(
+                                                              aspectRatio: 1.02,
+                                                              child: Container(
+                                                                padding: EdgeInsets.all(getProportionateScreenWidth(10)),
+                                                                decoration: BoxDecoration(
+                                                                  color: Color(0xff9c89ff),
+                                                                  borderRadius: BorderRadius.circular(15),
+                                                                ),
+                                                                child: Hero(
+                                                                  tag: _feedbackImageList[index].id!,
+                                                                  child: Image.network("http://192.168.0.157:8000"+ _feedbackImageList[index].url!)
+                                                                ),
+                                                              ),
+                                                            );
+                                                          }
+                                                  
+                                                          return SizedBox();
+                                                        }}),
+                                                    
                                                     
                                                     ],
                                                   ),
@@ -144,6 +181,17 @@ class _ViewFeedbackScreenState extends State<ViewFeedbackScreen> {
                       ],
                     );
                   }),
+            );
+            }
+             
+                     return Center(
+              child: Text(
+                "Feedback is Empty",
+                style: TextStyle(
+                  fontSize: getProportionateScreenWidth(18),
+                  color: Colors.black,
+                ),
+              ),
             );
           }
         },

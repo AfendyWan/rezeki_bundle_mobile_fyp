@@ -7,7 +7,6 @@ import 'package:rezeki_bundle_mobile/model/sale_item.dart';
 import 'package:rezeki_bundle_mobile/model/sale_item_image.dart';
 
 getIsWishList(token, userID, saleItemID) async {
-
   //set api url
   final queryParameters = {
     'userID': userID.toString(),
@@ -61,6 +60,7 @@ toggleWishList(token, userID, saleItemID, wishListStatus) async {
     headers: header,
   );
 
+  print(finalUri);
   var respStr = await response.body;
   var jsonResponse = jsonDecode(respStr);
 

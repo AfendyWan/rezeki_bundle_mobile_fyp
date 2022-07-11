@@ -55,7 +55,7 @@ viewUserOrderItems(token, orderID) async {
 
   Uri uri = Uri.parse(url);
   final finalUri = uri.replace(queryParameters: queryParameters); //USE THIS
-
+  print("Getting user item");
   print(finalUri);
   final response = await http.get(
     finalUri,
@@ -66,9 +66,8 @@ viewUserOrderItems(token, orderID) async {
   if (response.statusCode == 200) {
     var jsonResponse = jsonDecode(response.body);
     print(jsonResponse);
-    List<OrderItem> ordersItem =
-        List<OrderItem>.from(jsonResponse.map((model) => OrderItem.fromJson(model)));
-
+    List<OrderItem> ordersItem = List<OrderItem>.from(
+        jsonResponse.map((model) => OrderItem.fromJson(model)));
 
     return ordersItem;
   } else {

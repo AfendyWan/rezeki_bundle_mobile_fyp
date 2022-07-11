@@ -132,11 +132,16 @@ addCartItem(token, userID, saleItemID, quantity) async {
   request.fields['userID'] = userID.toString();
   request.fields['saleItemID'] = saleItemID.toString();
   request.fields['quantity'] = quantity.toString();
-   var response = await request.send();
-
+  var response = await request.send();
 
   //get api result
   if (response.statusCode == 200) {
+    var jsonResponse = jsonDecode(response.persistentConnection.toString());
+      final res = await http.Response.fromStream(response);
+  print(res.body);
+   print("response");
+  
+
     return response;
   } else {
     print("Failed");

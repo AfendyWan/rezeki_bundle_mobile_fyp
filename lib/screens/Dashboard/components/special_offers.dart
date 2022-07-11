@@ -17,7 +17,7 @@ class SpecialOffers extends StatelessWidget {
           padding:
               EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
           child: SectionTitle(
-            title: "Special for you",
+            title: "Promotion",
             press: () {},
           ),
         ),
@@ -28,14 +28,14 @@ class SpecialOffers extends StatelessWidget {
             children: [
               SpecialOfferCard(
                 image: "assets/images/Image Banner 2.png",
-                category: "Smartphone",
-                numOfBrands: 18,
+                category: "Hoodie",
+                numOfBrands: 2,
                 press: () {},
               ),
               SpecialOfferCard(
                 image: "assets/images/Image Banner 3.png",
-                category: "Fashion",
-                numOfBrands: 24,
+                category: "Bags",
+                numOfBrands: 4,
                 press: () {},
               ),
               SizedBox(width: getProportionateScreenWidth(20)),

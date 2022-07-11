@@ -36,11 +36,10 @@ class CartCard extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              cart.itemName.toString(),
-              style: TextStyle(color: Colors.black, fontSize: 22),
-              maxLines: 1,
-            ),
+        FittedBox(
+          fit: BoxFit.fitWidth, 
+          child: Text(  cart.itemName.toString(),)
+        )   ,
            
             Text.rich(
               TextSpan(

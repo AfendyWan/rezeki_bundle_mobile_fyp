@@ -30,8 +30,10 @@ class _ProductDescriptionState extends State<ProductDescription> {
   var isWishList;
 
   getData() async {
+    print("gellow");
     isWishList = await getIsWishList(
         widget.token, widget.userdata!.id, widget.saleItem!.itemID);
+    print("gellow" + isWishList.toString());
   }
 
   @override
@@ -62,6 +64,7 @@ class _ProductDescriptionState extends State<ProductDescription> {
                 ),
                 GestureDetector(
                   onTap: () async {
+                    print("before" + isWishList.toString());
                     var result;
 
                     result = await toggleWishList(

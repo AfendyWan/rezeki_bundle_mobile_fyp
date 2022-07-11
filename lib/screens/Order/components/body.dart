@@ -66,7 +66,8 @@ class _BodyState extends State<Body> {
               print('project snapshot data is: ${projectSnap.data}');
               return const SizedBox();
             } else if (projectSnap.connectionState == ConnectionState.done) {
-              return ListView.builder(
+              if (_orderItemList.isNotEmpty) {
+                return ListView.builder(
                 itemCount: _orderItemList.length,
                 itemBuilder: (context, index) => Padding(
                   padding: EdgeInsets.symmetric(vertical: 10),
@@ -76,6 +77,16 @@ class _BodyState extends State<Body> {
                     order:  _orderItemList[index],)
                 ),
               );
+              } 
+                     return Center(
+              child: Text(
+                "Order is Empty",
+                style: TextStyle(
+                  fontSize: getProportionateScreenWidth(18),
+                  color: Colors.black,
+                ),
+              ),
+            );
             } else {
               return const SizedBox();
             }

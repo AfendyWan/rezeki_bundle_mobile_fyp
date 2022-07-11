@@ -86,7 +86,7 @@ class _BodyState extends State<Body> {
                         itemBuilder: (context, index) => Padding(
                           padding: EdgeInsets.symmetric(vertical: 10),
                           child:
-                              OrderItemCard(orderItem: _orderitemList[index]),
+                              OrderItemCard(orderItem: _orderitemList[index], token: widget.token, userdata: widget.userdata,),
                         ),
                       ),
                     ),

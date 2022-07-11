@@ -65,6 +65,7 @@ getSaleItemCategory() async {
     "Accept": "application/json",
   });
 
+  print(Uri.parse(url));
   //get api result
   if (response.statusCode == 200) {
     var jsonResponse = jsonDecode(response.body);
@@ -73,7 +74,7 @@ getSaleItemCategory() async {
         jsonResponse.map((model) => CategorySaleItem.fromJson(model)));
     return saleItemCategory;
   } else {
-    print("Failed");
+    print("Failed to get sale item category");
   }
 }
 
@@ -116,7 +117,7 @@ getPromotionSaleItemList() async {
 
     List<SaleItem> saleItem = List<SaleItem>.from(
         jsonResponse.map((model) => SaleItem.fromJson(model)));
-   
+
     return saleItem;
   } else {
     print("Failed");

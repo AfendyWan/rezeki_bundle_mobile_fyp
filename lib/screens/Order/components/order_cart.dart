@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:open_file/open_file.dart';
+import 'package:rezeki_bundle_mobile/api/payment_api.dart';
 import 'package:rezeki_bundle_mobile/components/default_button.dart';
 import 'package:rezeki_bundle_mobile/components/size_config.dart';
 
@@ -94,7 +95,7 @@ class OrderCard extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(0, 4.0, 0, 4.0),
               child: Text.rich(
                 TextSpan(
-                  text: "Order data and time ",
+                  text: "Order date and time ",
                   style: TextStyle(
                       fontWeight: FontWeight.w600, color: kPrimaryColor),
                   children: [
@@ -154,8 +155,14 @@ class OrderCard extends StatelessWidget {
                           primary: Colors.white,
                           backgroundColor: kPrimaryColor,
                         ),
-                        onPressed: () {
-                        //  OpenFile.open(filePath)
+                        onPressed: () async {
+                          var paymentReceiptImage;
+                          paymentReceiptImage = await getPaymentReceipt(
+                              order.paymentID.toString());
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (_) {
+                            return DetailImageScreen(imageName: paymentReceiptImage);
+                          }));
                         },
                         child: Text(
                           "View Payment",
@@ -172,6 +179,63 @@ class OrderCard extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class DetailImageScreen extends StatelessWidget {
+  final String? imageName;
+  DetailImageScreen({Key? key, @required this.imageName}) : super(key: key);
+  @override
+  
+   
+  Widget build(BuildContext context) {
+     Size size = MediaQuery.of(context).size;
+    return Scaffold(
+      body: GestureDetector(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Center(
+              child: Hero(
+                tag: 'imageHero',
+                child: Image.network("http://192.168.0.157:8000" +
+                         imageName!)
+              ),
+            ),
+            SizedBox(height: 20),
+            Container(
+                          margin: EdgeInsets.symmetric(vertical: 10),
+                          width: size.width * 0.4,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(29),
+                            child: ElevatedButton(
+                              child: const Text(
+                                "Back",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  primary: Color.fromARGB(255, 251, 142, 242),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 40, vertical: 10),
+                                  textStyle: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w500)),
+                            ),
+                          ),
+                        )
+          ],
+        ),
+        onTap: () {
+          Navigator.pop(context);
+        },
       ),
     );
   }

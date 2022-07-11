@@ -93,6 +93,8 @@ class _CheckoutCardState extends State<CheckoutCard> {
                     ],
                   ),
                 ),
+                 widget.totalPrice == "null" || widget.totalPrice == "0.00"?
+                 SizedBox():
                 SizedBox(
                   width: getProportionateScreenWidth(190),
                   child: DefaultButton(

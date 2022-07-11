@@ -1,16 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:rezeki_bundle_mobile/api/cart_api.dart';
-import 'package:rezeki_bundle_mobile/api/order_api.dart';
 import 'package:rezeki_bundle_mobile/api/shipping_api.dart';
-import 'package:rezeki_bundle_mobile/components/home_header.dart';
 import 'package:rezeki_bundle_mobile/components/size_config.dart';
-import 'package:rezeki_bundle_mobile/model/cart_item.dart';
-import 'package:rezeki_bundle_mobile/model/order.dart';
 import 'package:rezeki_bundle_mobile/model/shipment.dart';
 import 'package:rezeki_bundle_mobile/model/user.dart';
-import 'package:rezeki_bundle_mobile/screens/Cart/components/check_out_card.dart';
-
 import 'shipment_card.dart';
 import 'package:async/async.dart';
 
@@ -67,18 +59,31 @@ class _BodyState extends State<Body> {
         future: getData(),
         builder: (context, projectSnap) {
           if (projectSnap.connectionState == ConnectionState.none) {
-            print('project snapshot data is: ${projectSnap.data}');
-            return const SizedBox();
+        
+              return const CircularProgressIndicator();
           } else if (projectSnap.connectionState == ConnectionState.done) {
-            return ListView.builder(
-              itemCount: _shipmentList.length,
-              itemBuilder: (context, index) => Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  child: ShipmentCard(
-                    token: widget.token,
-                    userdata: widget.userdata,
-                    shipment: _shipmentList[index],
-                  )),
+           
+            if (_shipmentList.isNotEmpty) {
+              return ListView.builder(
+                itemCount: _shipmentList.length,
+                itemBuilder: (context, index) => Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    child: ShipmentCard(
+                      token: widget.token,
+                      userdata: widget.userdata,
+                      shipment: _shipmentList[index],
+                    )),
+              );
+            }
+
+            return Center(
+              child: Text(
+                "Shipment is Empty",
+                style: TextStyle(
+                  fontSize: getProportionateScreenWidth(18),
+                  color: Colors.black,
+                ),
+              ),
             );
           } else {
             return const SizedBox();

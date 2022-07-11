@@ -244,6 +244,8 @@ class _PlaceOrderCardState extends State<PlaceOrderCard> {
                                   print(getSettingKey);
                                   tempTotalPrice = (tempTotalPrice! +
                                       double.parse(getSettingValue));
+                                  tempTotalPrice = double.parse((tempTotalPrice)!.toStringAsFixed(2));
+                                   
                                 });
                               },
                               validator: (value) {
@@ -332,7 +334,7 @@ class _PlaceOrderCardState extends State<PlaceOrderCard> {
                                   TextStyle(fontSize: 16, color: Colors.black),
                             )
                           : TextSpan(
-                              text: "RM " + tempTotalPrice.toString(),
+                              text: "RM " + tempTotalPrice!.toStringAsFixed(2),
                               style:
                                   TextStyle(fontSize: 16, color: Colors.black),
                             )
@@ -511,8 +513,17 @@ class _PlaceOrderCardState extends State<PlaceOrderCard> {
                                                               snackBar);
                                                     } else {
                                                       submitPayment(
-                                                          widget.token, widget.userdata!.id, getFile, tempTotalPrice, widget.totalPrice, getSettingValue, getSettingKey, "",  getDate(), getTime());
-                                                                final snackBar = SnackBar(
+                                                          widget.token,
+                                                          widget.userdata!.id,
+                                                          getFile,
+                                                          tempTotalPrice,
+                                                          widget.totalPrice,
+                                                          getSettingValue,
+                                                          getSettingKey,
+                                                          "",
+                                                          getDate(),
+                                                          getTime());
+                                                      final snackBar = SnackBar(
                                                         content: const Text(
                                                             'Your payment receipt had been submitted'),
                                                         // action: SnackBarAction(
@@ -529,46 +540,60 @@ class _PlaceOrderCardState extends State<PlaceOrderCard> {
                                                               context)
                                                           .showSnackBar(
                                                               snackBar);
-                                                             Navigator.push(
-                                                                  context,
-                                                                  MaterialPageRoute(
-                                                                      builder: (context) => DashboardScreen(
-                                                                            token: widget.token,
-                                                                            userdata: widget.userdata,
-                                                                            key: widget.key,
-                                                                          )));
-                                                     //submitPayment(token, userID, paymentReceipt, totalPrice, subTotalPrice, shippingPrice, deliveryOptionName, couriers, deliveryDateTime )
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  DashboardScreen(
+                                                                    token: widget
+                                                                        .token,
+                                                                    userdata: widget
+                                                                        .userdata,
+                                                                    key: widget
+                                                                        .key,
+                                                                  )));
+                                                      //submitPayment(token, userID, paymentReceipt, totalPrice, subTotalPrice, shippingPrice, deliveryOptionName, couriers, deliveryDateTime )
                                                     }
-                                                 
                                                   } else {
-                                                      submitPayment(
-                                                          widget.token, widget.userdata!.id, getFile, tempTotalPrice, widget.totalPrice, getSettingValue, getSettingKey, getShippingCourier, "", "");
-                                                                                final snackBar = SnackBar(
-                                                        content: const Text(
-                                                            'Your payment receipt had been submitted'),
-                                                        // action: SnackBarAction(
-                                                        //   label: 'Undo',
-                                                        //   onPressed: () {
-                                                        //     // Some code to undo the change.
-                                                        //   },
-                                                        // ),
-                                                      );
+                                                    submitPayment(
+                                                        widget.token,
+                                                        widget.userdata!.id,
+                                                        getFile,
+                                                        tempTotalPrice,
+                                                        widget.totalPrice,
+                                                        getSettingValue,
+                                                        getSettingKey,
+                                                        getShippingCourier,
+                                                        "",
+                                                        "");
+                                                    final snackBar = SnackBar(
+                                                      content: const Text(
+                                                          'Your payment receipt had been submitted'),
+                                                      // action: SnackBarAction(
+                                                      //   label: 'Undo',
+                                                      //   onPressed: () {
+                                                      //     // Some code to undo the change.
+                                                      //   },
+                                                      // ),
+                                                    );
 
-                                                      // Find the ScaffoldMessenger in the widget tree
-                                                      // and use it to show a SnackBar.
-                                                      ScaffoldMessenger.of(
-                                                              context)
-                                                          .showSnackBar(
-                                                              snackBar);
-                                                             Navigator.push(
-                                                                  context,
-                                                                  MaterialPageRoute(
-                                                                      builder: (context) => DashboardScreen(
-                                                                            token: widget.token,
-                                                                            userdata: widget.userdata,
-                                                                            key: widget.key,
-                                                                          )));
-
+                                                    // Find the ScaffoldMessenger in the widget tree
+                                                    // and use it to show a SnackBar.
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(snackBar);
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                DashboardScreen(
+                                                                  token: widget
+                                                                      .token,
+                                                                  userdata: widget
+                                                                      .userdata,
+                                                                  key: widget
+                                                                      .key,
+                                                                )));
                                                   }
                                                 }
                                               }
