@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:rezeki_bundle_mobile/constants.dart';
 import 'package:rezeki_bundle_mobile/model/shipment.dart';
 import 'package:rezeki_bundle_mobile/model/user_shipping_address.dart';
 
@@ -15,7 +16,7 @@ getDefaultShippingAddress(token, userID) async {
     HttpHeaders.contentTypeHeader: "application/json"
   };
 
-  var url = "http://192.168.0.157:8000/api/shipment/getDefaultShippingAddress";
+  var url = hostURL + "/api/shipment/getDefaultShippingAddress";
 
   Uri uri = Uri.parse(url);
   final finalUri = uri.replace(queryParameters: queryParameters); //USE THIS
@@ -52,7 +53,7 @@ getALlUserShippingAddress(token, userID) async {
     HttpHeaders.contentTypeHeader: "application/json"
   };
 
-  var url = "http://192.168.0.157:8000/api/shipment/getALlUserShippingAddress";
+  var url = hostURL + "/api/shipment/getALlUserShippingAddress";
 
   Uri uri = Uri.parse(url);
   final finalUri = uri.replace(queryParameters: queryParameters); //USE THIS
@@ -98,7 +99,7 @@ updateUserShipping(token, fullName, phoneNumber, shipmentID, userID, shipping_ad
     HttpHeaders.contentTypeHeader: "application/json"
   };
 
-  var url = "http://192.168.0.157:8000/api/shipment/updateUserShipping";
+  var url = hostURL + "/api/shipment/updateUserShipping";
 
   Uri uri = Uri.parse(url);
   final finalUri = uri.replace(queryParameters: queryParameters); //USE THIS
@@ -140,7 +141,7 @@ addUserShippingAddress(token, fullName, phoneNumber, userID, shipping_address, s
     HttpHeaders.contentTypeHeader: "application/json"
   };
 
-  var url = "http://192.168.0.157:8000/api/shipment/addUserShippingAddress";
+  var url = hostURL + "/api/shipment/addUserShippingAddress";
 
   Uri uri = Uri.parse(url);
   final finalUri = uri.replace(queryParameters: queryParameters); //USE THIS
@@ -177,7 +178,7 @@ deleteUserShippingAddress(
     HttpHeaders.contentTypeHeader: "application/json"
   };
 
-  var url = "http://192.168.0.157:8000/api/shipment/deleteUserShippingAddress";
+  var url = hostURL + "/api/shipment/deleteUserShippingAddress";
 
   Uri uri = Uri.parse(url);
   final finalUri = uri.replace(queryParameters: queryParameters); //USE THIS
@@ -214,7 +215,7 @@ getUserShipment(
     HttpHeaders.contentTypeHeader: "application/json"
   };
 
-  var url = "http://192.168.0.157:8000/api/shipment/getUserShipment";
+  var url = hostURL + "/api/shipment/getUserShipment";
 
   Uri uri = Uri.parse(url);
   final finalUri = uri.replace(queryParameters: queryParameters); //USE THIS

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:rezeki_bundle_mobile/constants.dart';
 import 'package:rezeki_bundle_mobile/model/errors.dart';
 import 'package:rezeki_bundle_mobile/model/user.dart';
 import 'package:rezeki_bundle_mobile/api/APIRoute.dart';
@@ -8,7 +9,7 @@ import '../screens/Dashboard/dashboard.dart';
 
 registerAcc(context, firstName, lastName, email, gender, phoneNumber,
     shippingAddress, postCode, states, city, password) async {
-  var url = "http://192.168.0.157:8000/api/auth/register";
+  var url = hostURL + "/api/auth/register";
 
   Map<String, String> headers = {
     "Content-Type": "application/json",

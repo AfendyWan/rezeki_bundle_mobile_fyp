@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:rezeki_bundle_mobile/api/sale_item_api.dart';
 import 'package:rezeki_bundle_mobile/components/size_config.dart';
@@ -55,7 +56,7 @@ class _ProductImagesState extends State<ProductImages> {
           if (projectSnap.connectionState == ConnectionState.none) {
             print("Future builder failed");
             return const CircularProgressIndicator();
-          } else {
+          } else if (projectSnap.connectionState == ConnectionState.done) {
             return Column(
               children: [
                 SizedBox(
@@ -64,7 +65,11 @@ class _ProductImagesState extends State<ProductImages> {
                     aspectRatio: 1,
                     child: Hero(
                         tag: widget.saleItem.id.toString(),
-                        child: Image.network(selectedImageUrl!)),
+                        child: CachedNetworkImage(
+                          imageUrl:selectedImageUrl!,
+                          placeholder: (context, url) => CircularProgressIndicator(),
+                          errorWidget: (context, url, error) => Icon(Icons.error),
+                      ),),
                   ),
                 ),
                 // SizedBox(height: getProportionateScreenWidth(20)),
@@ -78,7 +83,9 @@ class _ProductImagesState extends State<ProductImages> {
                 )
               ],
             );
-          }
+          }else {
+                    return const SizedBox();
+                  }
         });
   }
 

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:rezeki_bundle_mobile/constants.dart';
 import 'package:rezeki_bundle_mobile/model/cart.dart';
 import 'package:rezeki_bundle_mobile/model/cart_item.dart';
 import 'package:rezeki_bundle_mobile/model/feedback.dart';
@@ -8,7 +9,7 @@ import 'package:rezeki_bundle_mobile/model/feedback_image.dart';
 
 getAllUserFeedback(token) async {
   //set api url
-  var url = "http://192.168.0.157:8000/api/feedback/getUsersFeedback";
+  var url = hostURL + "/api/feedback/getUsersFeedback";
 
   //initiate api
   var response = await http.get(Uri.parse(url), headers: {
@@ -38,7 +39,7 @@ getUserFeedbackImages(token) async {
     HttpHeaders.contentTypeHeader: "application/json"
   };
   print("object1");
-  var url = "http://192.168.0.157:8000/api/feedback/getFeedbackImages";
+  var url = hostURL + "/api/feedback/getFeedbackImages";
 
   var request = http.MultipartRequest('GET', Uri.parse(url));
   request.headers.addAll(headers);
@@ -69,7 +70,7 @@ addFeedback(token, order_id, feedbackTitle, feedbackDescription, userId,
     HttpHeaders.contentTypeHeader: "application/json"
   };
 
-  var url = "http://192.168.0.157:8000/api/feedback/addFeedback";
+  var url = hostURL + "/api/feedback/addFeedback";
 
   // var request = http.MultipartRequest('POST', Uri.parse(url))
   //   ..files.add(

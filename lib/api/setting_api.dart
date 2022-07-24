@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:rezeki_bundle_mobile/constants.dart';
 import 'package:rezeki_bundle_mobile/model/city.dart';
 import 'package:rezeki_bundle_mobile/model/settings.dart';
 import 'package:rezeki_bundle_mobile/model/state.dart';
@@ -13,7 +14,7 @@ import 'package:rezeki_bundle_mobile/main.dart';
 import '../screens/Dashboard/dashboard.dart';
 
 getAllStates() async {
-  var url = "http://192.168.0.157:8000/api/settings/showAllStates";
+  var url = hostURL + "/api/settings/showAllStates";
 
   var response = await http.get(Uri.parse(url), headers: {
     "Content-Type": "application/json",
@@ -33,7 +34,7 @@ getAllStates() async {
 }
 
 getAllCities() async {
-  var url = "http://192.168.0.157:8000/api/settings/showAllCities";
+  var url = hostURL + "/api/settings/showAllCities";
 
   var response = await http.get(Uri.parse(url), headers: {
     "Content-Type": "application/json",
@@ -54,7 +55,7 @@ getAllCities() async {
 }
 
 getAdminSettings() async {
-  var url = "http://192.168.0.157:8000/api/settings/getAdminSettings";
+  var url = hostURL + "/api/settings/getAdminSettings";
 
   var response = await http.get(Uri.parse(url), headers: {
     "Content-Type": "application/json",
@@ -76,7 +77,7 @@ getAdminSettings() async {
 }
 
 getAdminAnnouncement() async {
-  var url = "http://192.168.0.157:8000/api/settings/getAdminAnnouncement";
+  var url = hostURL + "/api/settings/getAdminAnnouncement";
 
   var response = await http.get(Uri.parse(url), headers: {
     "Content-Type": "application/json",

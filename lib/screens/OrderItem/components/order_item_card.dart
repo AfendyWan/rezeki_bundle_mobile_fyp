@@ -114,7 +114,7 @@ class _OrderItemCardState extends State<OrderItemCard> {
                               builder: ((context, setState) {
                                 return AlertDialog(
                                     scrollable: true,
-                                    title: Text('Payment of Total: RM '),
+                                    title: Text('Submit Feedback '),
                                     content: Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Column(
@@ -167,8 +167,8 @@ class _OrderItemCardState extends State<OrderItemCard> {
                                                   child: TextFormField(
                                                     initialValue:
                                                         fileResult == null
-                                                            ? "Upload Receipt"
-                                                            : "Receipt Ready",
+                                                            ? "Upload Feedback"
+                                                            : "Feedback Ready",
                                                     decoration: InputDecoration(
                                                       icon: fileResult == null
                                                           ? Icon(

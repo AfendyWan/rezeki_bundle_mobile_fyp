@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:rezeki_bundle_mobile/constants.dart';
 
 // submitPayment(token, userID, paymentReceipt, totalPrice, subTotalPrice, shippingPrice, deliveryOptionName, couriers, date, time ) async {
 //   String deliveryDateTime = date + time;
@@ -53,7 +54,7 @@ submitPayment(token, userID, paymentReceipt, totalPrice, subTotalPrice,
     HttpHeaders.contentTypeHeader: "application/json"
   };
 
-  var url = "http://192.168.0.157:8000/api/payment/submitPayment";
+  var url = hostURL + "/api/payment/submitPayment";
 
   var request = http.MultipartRequest('POST', Uri.parse(url))
     ..files.add(
@@ -84,7 +85,7 @@ submitPayment(token, userID, paymentReceipt, totalPrice, subTotalPrice,
 
 getPaymentReceipt(id) async {
   //set api url
-  var url = "http://192.168.0.157:8000/api/payment/getPaymentReceipt/" +
+  var url = hostURL + "/api/payment/getPaymentReceipt/" +
       id.toString();
   print(url);
 

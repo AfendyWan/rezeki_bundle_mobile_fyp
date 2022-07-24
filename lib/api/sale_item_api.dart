@@ -2,20 +2,24 @@ import 'dart:io';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:rezeki_bundle_mobile/constants.dart';
 import 'package:rezeki_bundle_mobile/model/category_sale_item.dart';
 import 'package:rezeki_bundle_mobile/model/sale_item.dart';
 import 'package:rezeki_bundle_mobile/model/sale_item_image.dart';
 
 getSaleItemImages(id) async {
+
   //set api url
-  var url = "http://192.168.0.157:8000/api/saleItem/showSaleItemImages/" +
+  var url = hostURL + "/api/saleItem/showSaleItemImages/" +
       id.toString();
   print(url);
-
+print("url");
   //initiate api
   var response = await http.get(Uri.parse(url), headers: {
     "Content-Type": "application/json",
     "Accept": "application/json",
+    "Connection": "Keep-Alive",
+      "Keep-Alive": "timeout=200, max=1000"
   });
 
   //get api result
@@ -33,7 +37,7 @@ getSaleItemImages(id) async {
 
 getSaleItemList(id) async {
   //set api url
-  var url = "http://192.168.0.157:8000/api/saleItem/showSaleItemList/" +
+  var url = hostURL + "/api/saleItem/showSaleItemList/" +
       id.toString();
 
   //initiate api
@@ -57,7 +61,7 @@ getSaleItemList(id) async {
 
 getSaleItemCategory() async {
   //set api url
-  var url = "http://192.168.0.157:8000/api/saleItem/showAllSsaleItemCategory";
+  var url = hostURL + "/api/saleItem/showAllSsaleItemCategory";
 
   //initiate api
   var response = await http.get(Uri.parse(url), headers: {
@@ -81,7 +85,7 @@ getSaleItemCategory() async {
 getFirstThreeSaleItemCategory() async {
   //set api url
   var url =
-      "http://192.168.0.157:8000/api/saleItem/showFirstThreeSaleItemCategory";
+      hostURL + "/api/saleItem/showFirstThreeSaleItemCategory";
 
   //initiate api
   var response = await http.get(Uri.parse(url), headers: {
@@ -103,7 +107,7 @@ getFirstThreeSaleItemCategory() async {
 
 getPromotionSaleItemList() async {
   //set api url
-  var url = "http://192.168.0.157:8000/api/saleItem/showSaleItemPromotionList/";
+  var url = hostURL + "/api/saleItem/showSaleItemPromotionList/";
 
   //initiate api
   var response = await http.get(Uri.parse(url), headers: {
@@ -135,7 +139,7 @@ searchSaleItem(token, saleItemName) async {
     HttpHeaders.contentTypeHeader: "application/json"
   };
 
-  var url = "http://192.168.0.157:8000/api/saleItem/searchSaleItem?";
+  var url = hostURL + "/api/saleItem/searchSaleItem?";
 
   Uri uri = Uri.parse(url);
   final finalUri = uri.replace(queryParameters: queryParameters); //USE THIS

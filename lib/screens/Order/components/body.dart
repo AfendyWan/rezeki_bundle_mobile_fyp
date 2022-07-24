@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:rezeki_bundle_mobile/api/cart_api.dart';
-import 'package:rezeki_bundle_mobile/api/order_api.dart';
-import 'package:rezeki_bundle_mobile/components/home_header.dart';
+
 import 'package:rezeki_bundle_mobile/components/size_config.dart';
-import 'package:rezeki_bundle_mobile/model/cart_item.dart';
 import 'package:rezeki_bundle_mobile/model/order.dart';
 import 'package:rezeki_bundle_mobile/model/user.dart';
-import 'package:rezeki_bundle_mobile/screens/Cart/components/check_out_card.dart';
+import 'package:rezeki_bundle_mobile/repository/order_repository.dart';
+
 
 import 'order_cart.dart';
 import 'package:async/async.dart';
@@ -29,13 +26,18 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
+  OrderRepository orderRepository = OrderRepository();
   final AsyncMemoizer _memoizer = AsyncMemoizer();
-
+  
+  // ignore: prefer_typing_uninitialized_variables
   var orderItem;
+  // ignore: prefer_final_fields
   List<Order> _orderItemList = [];
   getData() async {
      _orderItemList.clear();
-     orderItem = await getUserOrderTransaction(widget.token, widget.userdata!.id);
+     Stopwatch stopwatch = new Stopwatch()..start();
+     orderItem = await orderRepository.getUserOrderTransaction(widget.token, widget.userdata!.id);
+     print('getUserOrderTransaction() executed in ${stopwatch.elapsed}');
     
     for (var data in orderItem) {
       //transfer states list from GET method call to a new one
@@ -63,7 +65,7 @@ class _BodyState extends State<Body> {
           future: getData(),
           builder: (context, projectSnap) {
             if (projectSnap.connectionState == ConnectionState.none) {
-              print('project snapshot data is: ${projectSnap.data}');
+              
               return const SizedBox();
             } else if (projectSnap.connectionState == ConnectionState.done) {
               if (_orderItemList.isNotEmpty) {

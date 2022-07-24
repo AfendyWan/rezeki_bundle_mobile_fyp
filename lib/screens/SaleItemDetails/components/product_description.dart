@@ -187,7 +187,10 @@ class _ProductDescriptionState extends State<ProductDescription> {
                         style: TextStyle(fontSize: 20),
                       ),
                     ),
-                    Padding(
+               
+                  ],
+                ),
+                     Padding(
                       padding: EdgeInsets.only(
                         top: getProportionateScreenHeight(10),
                         left: getProportionateScreenWidth(20),
@@ -198,8 +201,6 @@ class _ProductDescriptionState extends State<ProductDescription> {
                         style: TextStyle(fontSize: 20),
                       ),
                     ),
-                  ],
-                ),
                 Padding(
                   padding: EdgeInsets.only(
                     top: getProportionateScreenHeight(10),

@@ -3,10 +3,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:rezeki_bundle_mobile/constants.dart';
 import 'package:rezeki_bundle_mobile/model/user.dart';
 
 changeProfilePhoto(context, userID, profileImage) async {
-  var url = "http://192.168.0.157:8000/api/auth/changeProfilePhoto?";
+  var url = hostURL + "/api/auth/changeProfilePhoto?";
 
   Map<String, String> headers = {
     "Content-Type": "application/json",
@@ -41,7 +42,7 @@ getProfilePhoto(
     HttpHeaders.contentTypeHeader: "application/json"
   };
 
-  var url = "http://192.168.0.157:8000/api/auth/getProfilePhoto?";
+  var url = hostURL + "/api/auth/getProfilePhoto?";
   Uri uri = Uri.parse(url);
   final finalUri = uri.replace(queryParameters: queryParameters); //USE THIS
   print(finalUri);
@@ -73,7 +74,7 @@ updateUserData(
   phoneNumber,
   postCode,
 ) async {
-  var url = "http://192.168.0.157:8000/api/auth/updateUserData";
+  var url = hostURL + "/api/auth/updateUserData";
 
 
   final queryParameters = {
@@ -129,7 +130,7 @@ updateUserData(
 }
 
 changeUserPassword(context, userID, newPassord, oldPassword) async {
-  var url = "http://192.168.0.157:8000/api/auth/changeUserPassword";
+  var url = hostURL + "/api/auth/changeUserPassword";
 
   Map<String, String> headers = {
     "Content-Type": "application/json",

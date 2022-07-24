@@ -37,7 +37,7 @@ class _CategoriesState extends State<Categories> {
             icon: categories[index]["icon"],
             text: categories[index]["text"],
             press: () {
-              print(categories[index]["text"]);
+             
               if(categories[index]["text"] == "Wish"){
                  Navigator.push(
                   context,

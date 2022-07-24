@@ -2,6 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:rezeki_bundle_mobile/api/APIRoute.dart';
+import 'package:rezeki_bundle_mobile/components/result_error.dart';
+import 'package:rezeki_bundle_mobile/constants.dart';
 import 'package:rezeki_bundle_mobile/model/cart.dart';
 import 'package:rezeki_bundle_mobile/model/cart_item.dart';
 import 'package:rezeki_bundle_mobile/model/category_sale_item.dart';
@@ -9,6 +12,7 @@ import 'package:rezeki_bundle_mobile/model/sale_item.dart';
 import 'package:rezeki_bundle_mobile/model/sale_item_image.dart';
 
 getUserCart(token, userID) async {
+  
   //set api url
   final queryParameters = {
     'userID': userID.toString(),
@@ -19,11 +23,11 @@ getUserCart(token, userID) async {
     HttpHeaders.contentTypeHeader: "application/json"
   };
 
-  var url = "http://192.168.0.157:8000/api/cart/getUserCart?";
+  var url =  apiRequest + api["APICart"]["apiGetUserCart"];
 
   Uri uri = Uri.parse(url);
   final finalUri = uri.replace(queryParameters: queryParameters); //USE THIS
-  print("meow");
+
   print(finalUri);
   final response = await http.get(
     finalUri,
@@ -31,16 +35,17 @@ getUserCart(token, userID) async {
   );
 
   var respStr = await response.body;
-  var jsonResponse = jsonDecode(respStr);
 
   //get api result
   if (response.statusCode == 200) {
-    print(jsonResponse);
-    Cart? cartItem = Cart.fromJson(jsonDecode(respStr));
-
-    return cartItem;
+    if(response.body.isNotEmpty){
+      Cart? cartItem = Cart.fromJson(jsonDecode(respStr));
+      return cartItem;
+    }else{
+      throw ErrorGettingData("User cart data is empty");
+    }   
   } else {
-    print("Failed");
+    throw ErrorGettingData('Error getting user cart data');
   }
 }
 
@@ -55,7 +60,7 @@ getUserCartItem(token, userID) async {
     HttpHeaders.contentTypeHeader: "application/json"
   };
 
-  var url = "http://192.168.0.157:8000/api/cart/getUserCartItem?";
+  var url = hostURL + "/api/cart/getUserCartItem?";
 
   Uri uri = Uri.parse(url);
   final finalUri = uri.replace(queryParameters: queryParameters); //USE THIS
@@ -91,7 +96,7 @@ deleteCartItem(token, cartID, saleItemID) async {
     HttpHeaders.contentTypeHeader: "application/json"
   };
 
-  var url = "http://192.168.0.157:8000/api/cart/deletCartItem?";
+  var url = hostURL + "/api/cart/deletCartItem?";
 
   Uri uri = Uri.parse(url);
   final finalUri = uri.replace(queryParameters: queryParameters); //USE THIS
@@ -125,7 +130,7 @@ addCartItem(token, userID, saleItemID, quantity) async {
     HttpHeaders.contentTypeHeader: "application/json"
   };
 
-  var url = "http://192.168.0.157:8000/api/cart/addCartItem?";
+  var url = hostURL +"/api/cart/addCartItem?";
 
   var request = http.MultipartRequest('POST', Uri.parse(url));
   request.headers.addAll(headers);
@@ -138,9 +143,6 @@ addCartItem(token, userID, saleItemID, quantity) async {
   if (response.statusCode == 200) {
     var jsonResponse = jsonDecode(response.persistentConnection.toString());
       final res = await http.Response.fromStream(response);
-  print(res.body);
-   print("response");
-  
 
     return response;
   } else {

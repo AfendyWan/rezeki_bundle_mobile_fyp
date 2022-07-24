@@ -92,7 +92,7 @@ class OrderCard extends StatelessWidget {
                 ),
               ),
             ),
-                        Padding(
+            Padding(
               padding: const EdgeInsets.fromLTRB(0, 4.0, 0, 4.0),
               child: Text.rich(
                 TextSpan(

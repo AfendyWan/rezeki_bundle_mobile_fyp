@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:rezeki_bundle_mobile/constants.dart';
 import 'package:rezeki_bundle_mobile/model/category_sale_item.dart';
 import 'package:rezeki_bundle_mobile/model/sale_item.dart';
 import 'package:rezeki_bundle_mobile/model/sale_item_image.dart';
@@ -18,7 +19,7 @@ getIsWishList(token, userID, saleItemID) async {
     HttpHeaders.contentTypeHeader: "application/json"
   };
 
-  var url = "http://192.168.0.157:8000/api/wishList/isWishList?";
+  var url = hostURL + "/api/wishList/isWishList?";
   Uri uri = Uri.parse(url);
   final finalUri = uri.replace(queryParameters: queryParameters); //USE THIS
 
@@ -51,7 +52,7 @@ toggleWishList(token, userID, saleItemID, wishListStatus) async {
     HttpHeaders.contentTypeHeader: "application/json"
   };
 
-  var url = "http://192.168.0.157:8000/api/wishList/toggleWishList?";
+  var url = hostURL + "/api/wishList/toggleWishList?";
   Uri uri = Uri.parse(url);
   final finalUri = uri.replace(queryParameters: queryParameters); //USE THIS
 
@@ -75,7 +76,7 @@ toggleWishList(token, userID, saleItemID, wishListStatus) async {
 getUserWishList(id) async {
   //set api url
   var url =
-      "http://192.168.0.157:8000/api/wishList/getUserWishList/" + id.toString();
+      hostURL + "/api/wishList/getUserWishList/" + id.toString();
 
   //initiate api
   var response = await http.get(Uri.parse(url), headers: {
